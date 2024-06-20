@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BRAND List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 2px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <tr>
+        <th>SITE NAME</th>
+        <th>OWNER NAME</th>
+        <th>PIN CODE</th>
+        <th>STATE</th>
+        <th>CITY</th>
+        <th>HOUSE NO</th>
+        <th>ROAD NAME</th>
+        <th>ADDRESS</th>
+        <th>ACTION</th>
+    </tr>
+    {% for i in sitess %}
+    <tr>
+        <td>{{ i.site_name }}</td>
+        <td>{{ i.ownername }}</td>
+        <td>{{ i.pincode }}</td>
+        <td>{{ i.state }}</td>
+        <td>{{ i.city }}</td>
+        <td>{{ i.houseno }}</td>
+        <td>{{ i.roadname }}</td>
+        <td>{{ i.address }}</td>
+        <td>
+            <a href="/updatesite/{{ i.id }}">update</a>
+            <a href="/deletesite/{{ i.id }}">delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

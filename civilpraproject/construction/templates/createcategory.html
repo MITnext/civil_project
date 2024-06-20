@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Category</title>
+</head>
+<body>
+    <form id="" method="POST" action=""  enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <table border="2" style="width:40%">
+                <tr><th align="center" colspan="4">ADD CATEGORY</th></tr>
+                <tr>
+            <td align="center">
+                <label>CATEGORY-Name :</label>
+            </td>
+            <td>
+                <input style="width:98%" type="text" name="categoryname" id="categoryname" placeholder="Enter CATEGORY-Name">
+            </td>
+                </tr>
+        <tr align="center">
+            <td colspan="4"><button type="submit">submit</button>
+            <input type="button" name="btncancel" id="btncancel" value="Cancel">
+            </td>
+        </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

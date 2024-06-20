@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Site Task List</title>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .searchable-select {
+            position: relative;
+            display: inline-block;
+        }
+
+        .searchable-select input {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .searchable-select ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 3px 3px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            list-style-type: none;
+            display: none;
+            z-index: 1;
+        }
+
+        .searchable-select ul li {
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .searchable-select ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        function filterOptions(input) {
+            var filter = input.value.toUpperCase();
+            var ul = input.nextElementSibling;
+            var li = ul.getElementsByTagName('li');
+            for (var i = 0; i < li.length; i++) {
+                var txtValue = li[i].textContent || li[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        function toggleDropdown(input) {
+            var ul = input.nextElementSibling;
+            ul.style.display = ul.style.display === 'none' || ul.style.display === '' ? 'block' : 'none';
+        }
+
+        function selectOption(name, id, inputId, selectId) {
+            var input = document.getElementById(inputId);
+            input.value = name;
+            var select = document.getElementById(selectId);
+            select.value = id;
+            document.forms[0].submit();
+        }
+
+        document.addEventListener('click', function(e) {
+            var searchInputs = document.querySelectorAll('.searchable-select input');
+            searchInputs.forEach(function(input) {
+                if (!input.contains(e.target)) {
+                    input.nextElementSibling.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Customer Site Task List</h1>
+
+    <form method="GET">
+        <label for="customer_name">Customer:</label>
+        <div class="searchable-select">
+            <input type="text" id="customer_name" name="customer_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" value="{% for customer in customers %}{% if customer.id|stringformat:'s' == selected_customer %}{{ customer.customer_name }}{% endif %}{% endfor %}">
+            <ul id="customer-list">
+                {% for customer in customers %}
+                <li onclick="selectOption('{{ customer.customer_name }}', '{{ customer.id }}', 'customer_name', 'customer')">{{ customer.customer_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <select id="customer" name="customer" style="display: none;">
+            {% for customer in customers %}
+            <option value="{{ customer.id }}" {% if customer.id|stringformat:'s' == selected_customer %}selected{% endif %}>{{ customer.customer_name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="site_name">Site:</label>
+        <div class="searchable-select">
+            <input type="text" id="site_name" name="site_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" value="{% for site in sites %}{% if site.id|stringformat:'s' == selected_site %}{{ site.site_name }}{% endif %}{% endfor %}">
+            <ul id="site-list">
+                {% for site in sites %}
+                <li onclick="selectOption('{{ site.site_name }}', '{{ site.id }}', 'site_name', 'site')">{{ site.site_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <select id="site" name="site" style="display: none;">
+            {% for site in sites %}
+            <option value="{{ site.id }}" {% if site.id|stringformat:'s' == selected_site %}selected{% endif %}>{{ site.site_name }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <h2>Tasks</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Assign To</th>
+                <th>Assign Two</th>
+                <th>Assign Three</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                     <td>{{ task.task.constructionlevelname }}</td>
+                    <td>{{ task.assign_to.employee_name }}</td>
+                    <td>{{ task.assign_two.employee_name }}</td>
+                    <td>{{ task.assign_three.employee_name }}</td>
+                    <td>{{ task.start_date }}</td>
+                    <td>{{ task.end_date }}</td>
+                    <td>{{ task.state }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7">No tasks found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

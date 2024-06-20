@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT REGISTRATION</title>
+
+</head>
+<body>
+    <form id="" method="POST" action=""  enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <table border="2" style="width:30%">
+                <tr><th align="center" colspan="2">PRODUCT REGISTRATION</th></tr>
+            <tr>
+            <td align="center">
+                <label>products:</label>
+            </td>
+            <td>
+                <input type="text" name="productss" id="productss" placeholder="Enter productss">
+            </td>
+            </tr>
+            <tr>
+            <td align="center">
+                <label>Description:</label>
+            </td>
+            <td>
+                <input  type="text" name="descriptions" id="descriptions" placeholder="Enter Description">
+            </td>
+            </tr>
+        <tr align="center">
+            <td colspan="2"><button type="submit">submit</button>
+            <input type="button" name="btncancel" id="btncancel" value="Cancel">
+            </td>
+        </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

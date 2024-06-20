@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client Inquiry Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .searchable-select {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .searchable-select input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .searchable-select ul {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .searchable-select ul li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .searchable-select ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function toggleDropdown(dropdown) {
+                dropdown.toggle();
+            }
+
+            function filterDropdown(input, list) {
+                var filter = input.val().toLowerCase();
+                list.find('li').each(function() {
+                    var text = $(this).text().toLowerCase();
+                    $(this).toggle(text.includes(filter));
+                });
+            }
+
+            $('.searchable-select input').on('focus', function() {
+                var dropdown = $(this).siblings('ul');
+                toggleDropdown(dropdown);
+            });
+
+            $(document).on('click', function(event) {
+                if (!$(event.target).closest('.searchable-select').length) {
+                    $('.searchable-select ul').hide();
+                }
+            });
+
+            $('.searchable-select input').on('input', function() {
+                var list = $(this).siblings('ul');
+                filterDropdown($(this), list);
+            });
+
+            $('.searchable-select ul').on('click', 'li', function() {
+                var text = $(this).text();
+                var id = $(this).data('id');
+                var input = $(this).closest('.searchable-select').find('input');
+                input.val(text);
+                input.data('id', id);
+                $(this).parent().hide();
+                input.trigger('change');
+            });
+
+            $('#client_name_input').change(function() {
+                var clientId = $(this).data('id');
+                $('#client_name').val(clientId); // Set hidden field value
+                if (clientId) {
+                    $.ajax({
+                        url: '{% url "get_representatives" %}',
+                        data: {
+                            'client_id': clientId
+                        },
+                        success: function(data) {
+                            var representativeList = $('#representative_names_list');
+                            representativeList.empty();
+                            $.each(data, function(index, item) {
+                                representativeList.append('<li data-id="' + item.id + '">' + item.name + '</li>');
+                            });
+                        }
+                    });
+                }
+            });
+
+            $('#representative_names_input').change(function() {
+                var representativeId = $(this).data('id');
+                $('#representative_names').val(representativeId); // Set hidden field value
+            });
+
+            $('#construction_type_input').change(function() {
+                var constructionTypeId = $(this).data('id');
+                $('#construction_type').val(constructionTypeId); // Set hidden field value
+            });
+
+            $('form').on('submit', function(event) {
+                var isValid = true;
+                var requiredFields = ['client_name', 'representative_names', 'address', 'date', 'follow_off_date', 'construction_type'];
+
+                requiredFields.forEach(function(field) {
+                    if (!$('#' + field).val()) {
+                        isValid = false;
+                        alert('Please fill out the ' + field.replace('_', ' ') + ' field.');
+                    }
+                });
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>Client Inquiry Form</h2>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td><label for="client_name_input">Client Name</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="client_name_input" placeholder="Search Client">
+                        <ul id="client_name_list">
+                            {% for client in clients %}
+                            <li data-id="{{ client.id }}">{{ client.client_name }}</li>
+                            {% endfor %}
+                        </ul>
+                        <input type="hidden" id="client_name" name="client_name">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="representative_names_input">Representative Name</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="representative_names_input" placeholder="Search Representative">
+                        <ul id="representative_names_list">
+                            <!-- Filled dynamically based on selected client -->
+                        </ul>
+                        <input type="hidden" id="representative_names" name="representative_name">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="address">Address</label></td>
+                <td><input type="text" name="address" id="address" placeholder="Enter the address"></td>
+            </tr>
+            <tr>
+                <td><label for="date">Date</label></td>
+                <td><input type="date" name="date" id="date" placeholder="Enter the date"></td>
+            </tr>
+            <tr>
+                <td><label for="follow_off_date">Follow-off Date</label></td>
+                <td><input type="date" name="follow_off_date" id="follow_off_date" placeholder="Enter the follow-off date"></td>
+            </tr>
+            <tr>
+                <td><label for="construction_type_input">Construction Type</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="construction_type_input" placeholder="Search Construction Type">
+                        <ul id="construction_type_list">
+                            {% for type in con_type %}
+                            <li data-id="{{ type.id }}">{{ type.con_type }}</li>
+                            {% endfor %}
+                        </ul>
+                        <input type="hidden" id="construction_type" name="construction_type">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="remark">Remark</label></td>
+                <td><input type="text" name="remark" id="remark" placeholder="Enter remark"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" name="btnsubmit" id="btnsubmit" value="Save">
+                    <input type="reset" name="btncancel" id="btncancel" value="Cancel">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

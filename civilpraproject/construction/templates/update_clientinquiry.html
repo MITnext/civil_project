@@ -1,0 +1,49 @@
+
+{% block content %}
+<div class="card-body">
+    <form method="post">
+        {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td colspan="2" align="center">
+                    <h3>Update Customer</h3>
+                </td>
+            </tr>
+            <tr>
+                <th>client name:</th>
+                <td>{{ form.client_name }}</td>
+            </tr>
+            <tr>
+                <th>representative name:</th>
+                <td>{{ form.representative_name }}</td>
+            </tr>
+            <tr>
+                <th>address:</th>
+                <td>{{ form.address }}</td>
+            </tr>
+            <tr>
+                <th>date:</th>
+                <td>{{ form.date }}</td>
+            </tr>
+            <tr>
+                <th>follow off date:</th>
+                <td>{{ form.follow_off_date }}</td>
+            </tr>
+            <tr>
+                <th>construction type:</th>
+                <td>{{ form.construction_type }}</td>
+            </tr>
+            <tr>
+                <th>remark:</th>
+                <td>{{ form.remark }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                     <a type="button" class="btn btn-danger" href="/search_clientreg">Cancel</a>
+                    <button type="submit" class="btn btn-success">Update</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

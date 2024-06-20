@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EMPLOYEE LIST</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 2px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Employee List</h1>
+
+<table>
+    <tr>
+        <th>EMPLOYEE_NAME</th>
+        <th>EMPLOYEENUM</th>
+        <th>EMAILID</th>
+        <th>PHONENUM</th>
+        <th>DATEOFBIRTH</th>
+        <th>PERMANENTADDRESS</th>
+        <th>PRESENTADDRESS</th>
+        <th>GENDER</th>
+        <th>BLOODGROUP</th>
+        <th>STATUS</th>
+        <th>BANKACNUM</th>
+        <th>QUALIFICATION</th>
+        <th>AADHARCARD</th>
+        <th>PANCARD</th>
+        <th>PFNUM</th>
+        <th>PFELIGIBLEDATE</th>
+        <th>LICENCENUM</th>
+        <th>ACTION</th>
+    </tr>
+    {% for i in emplos %}
+    <tr>
+        <td>{{ i.employee_name }}</td>
+        <td>{{ i.employeenum }}</td>
+        <td>{{ i.emailid }}</td>
+        <td>{{ i.phonenum }}</td>
+        <td>{{ i.dateofbirth }}</td>
+        <td>{{ i.permanentaddress }}</td>
+        <td>{{ i.presentaddress }}</td>
+        <td>{{ i.gender }}</td>
+        <td>{{ i.bloodgroup }}</td>
+        <td>{{ i.status }}</td>
+        <td>{{ i.bankacnum }}</td>
+        <td>{{ i.qualification }}</td>
+        <td>{{ i.aadharcard }}</td>
+        <td>{{ i.pancard }}</td>
+        <td>{{ i.pfnum }}</td>
+        <td>{{ i.pfeligibledate }}</td>
+        <td>{{ i.licencenum }}</td>
+        <td class="actions">
+            <a href="/updatebrand/{{ i.id }}">Update</a>
+            <a href="/deletebrand/{{ i.id }}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

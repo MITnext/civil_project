@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Branch Master</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .searchable-select {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .searchable-select input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .searchable-select ul {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .searchable-select ul li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .searchable-select ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            // Function to validate form fields
+            function validateForm() {
+                var isValid = true;
+                var errorMsg = 'Please fill in the following fields:\n';
+
+                // Check each required field
+                if (!$('#client_name').val()) {
+                    isValid = false;
+                    errorMsg += '- Client Name\n';
+                }
+                if (!$('#representative_name').val()) {
+                    isValid = false;
+                    errorMsg += '- Representative Name\n';
+                }
+                if (!isValidPhoneNumber($('#phone_no').val())) {
+                    isValid = false;
+                    errorMsg += '- Phone Number (must be 10 digits)\n';
+                }
+                if (!$('#email').val()) {
+                    isValid = false;
+                    errorMsg += '- Email\n';
+                }
+                if (!$('#site_address').val()) {
+                    isValid = false;
+                    errorMsg += '- Site Address\n';
+                }
+                if (!$('#inquiry_date').val()) {
+                    isValid = false;
+                    errorMsg += '- Inquiry Date\n';
+                }
+
+                // Display error message and prevent form submission if not valid
+                if (!isValid) {
+                    alert(errorMsg);
+                    return false;
+                }
+
+                return true; // Submit the form if all validations pass
+            }
+
+            // Validate phone number format (exactly 10 digits)
+            function isValidPhoneNumber(phone) {
+                var phoneRegex = /^\d{10}$/;
+                return phoneRegex.test(phone);
+            }
+
+            // Validate form on submit
+            $('form').on('submit', function(event) {
+                return validateForm();
+            });
+
+            // Toggle dropdown function
+            function toggleDropdown(dropdown) {
+                dropdown.toggle();
+            }
+
+            // Filter dropdown list based on input
+            function filterDropdown(input, list) {
+                var filter = input.val().toLowerCase();
+                list.find('li').each(function() {
+                    var text = $(this).text().toLowerCase();
+                    $(this).toggle(text.includes(filter));
+                });
+            }
+
+            // Show dropdown on input focus
+            $('.searchable-select input').on('focus', function() {
+                var dropdown = $(this).siblings('ul');
+                toggleDropdown(dropdown);
+            });
+
+            // Hide dropdown when clicking outside
+            $(document).on('click', function(event) {
+                if (!$(event.target).closest('.searchable-select').length) {
+                    $('.searchable-select ul').hide();
+                }
+            });
+
+            // Filter dropdown list on input change
+            $('.searchable-select input').on('input', function() {
+                var list = $(this).siblings('ul');
+                filterDropdown($(this), list);
+            });
+
+            // Select item from dropdown list
+            $('.searchable-select ul').on('click', 'li', function() {
+                var text = $(this).text();
+                var id = $(this).data('id');
+                var input = $(this).closest('.searchable-select').find('input');
+                input.val(text);
+                input.data('id', id);
+                $(this).parent().hide();
+                input.trigger('change');
+            });
+
+            // Set representative name hidden field value
+            $('#representative_name_input').change(function() {
+                var representativeId = $(this).data('id');
+                $('#representative_name').val(representativeId);
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td><label>Client Name</label></td>
+                <td><input type="text" name="client_name" id="client_name" placeholder="Enter the client name" required></td>
+            </tr>
+            <tr>
+                <td><label>Representative Name</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="representative_name_input" placeholder="Select the representative name" required>
+                        <ul id="representative_name_list">
+                            <li data-id="0">Select Name</li>
+                            {% for i in employee_name %}
+                            <li data-id="{{ i.id }}">{{ i.employee_name }}</li>
+                            {% endfor %}
+                        </ul>
+                        <input type="hidden" id="representative_name" name="representative_name" required>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Phone No</label></td>
+                <td><input type="text" name="phone_no" id="phone_no" placeholder="Enter the phone number (10 digits)" required></td>
+            </tr>
+            <tr>
+                <td><label>Email</label></td>
+                <td><input type="email" name="email" id="email" placeholder="Enter the email" required></td>
+            </tr>
+            <tr>
+                <td><label>Site Address</label></td>
+                <td><input type="text" name="site_address" id="site_address" placeholder="Enter the site address" required></td>
+            </tr>
+            <tr>
+                <td><label>Inquiry Date</label></td>
+                <td><input type="date" name="inquiry_date" id="inquiry_date" required></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" name="btnsubmit" id="btnsubmit" value="Save">
+                    <input type="submit" name="btnsubmit" id="btncancel" value="Cancel">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

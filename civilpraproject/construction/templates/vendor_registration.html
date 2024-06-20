@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vendor Registration</title>
+</head>
+<body>
+<form method="POST" action="" >
+    {%csrf_token%}
+<table border="2">
+
+        <tr>
+        <td>
+            <label>vendor Name </label>
+
+        </td>
+
+
+        <td>
+            <input type="text" id="vendor_name" name="vendor_name" placeholder="enter the vendor Name " required>
+        </td>
+    </tr>
+        <tr>
+        <td>
+            <label>Contact Person </label>
+
+        </td>
+
+
+        <td>
+            <input type="text" id="contact_person" name="contact_person" placeholder="enter the Contact Person"  required>
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <label>contact number </label>
+
+        </td>
+
+
+        <td>
+            <input type="number" id="contact_number" name="contact_number" placeholder="enter the contact number"  required>
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <label>landline number </label>
+
+        </td>
+
+
+        <td>
+            <input type="number" id="landline_number" name="landline_number" placeholder="enter the landline number"  required>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Registered Office Address</label>
+
+        </td>
+        <td >
+             <textarea id="registered_office_address" name="registered_office_address" placeholder="Enter Registered Office Address" required></textarea>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Email</label>
+
+        </td>
+        <td >
+              <input type="email" id="email" name="email" placeholder=" Enter a Email " required><br>
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <label>GST Number</label>
+
+        </td>
+
+        <td>
+            <input type="text" id="gst_no" name="gst_no" pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[Z]{1}[0-9]{1}" title="Enter a valid GST number" placeholder="Enter the GST Number" required>
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <label>Organization Type</label>
+
+        </td>
+
+        <td>
+            <select id="organization_type" name="organization_type" required>
+            <option value="" selected disabled>Select Organization Type</option>
+            <option value="Sole Proprietorship">Sole Proprietorship</option>
+            <option value="Partnership">Partnership</option>
+            <option value="Limited Liability Partnership">Limited Liability Partnership</option>
+            <option value="Private Limited Company">Private Limited Company</option>
+            <option value="Public Limited Company">Public Limited Company</option>
+            <option value="Others">Others</option>
+        </select>
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <label>Nature of Business</label>
+
+        </td>
+
+        <td>
+            <textarea id="nature_of_business" name="nature_of_business" placeholder="Enter the Nature of Business " required></textarea>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" align="center">
+            <input type="submit" name="btnsubmit" id="btnsubmit" value="save">
+            <input type="submit" name="btnsubmit" id="btncanal " value="Cancal">  </td>
+    </tr>
+</table>
+</form>
+</body>

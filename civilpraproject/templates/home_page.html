@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page with Tabs</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            overflow: hidden;
+            background-color: #007BFF;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar a, .dropdown .dropbtn {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .navbar a:hover, .dropdown:hover .dropbtn {
+            background-color: #0056b3;
+        }
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+        .dropdown .dropbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+            z-index: 1;
+            top: 50px; /* Position the dropdown below the navbar */
+        }
+        .dropdown-content a {
+            float: none;
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .main-content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="#home">Home</a>
+    <div class="dropdown">
+        <button class="dropbtn">Master
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="createcustomer">Create Customer</a>
+            <a href="createsite">Create Site</a>
+            <a href="creatematerial">Create Material</a>
+            <a href="createconstructionlevel">Create Construction Level</a>
+            <a href="createcategory">Create Category</a>
+            <a href="createunit">Create Unit Measurement</a>
+            <a href="createbrand">Create Brand</a>
+            <a href="createworktype">Create Work Type</a>
+            <a href="createempregistration">Create Employee Registration</a>
+            <a href="construction_type/">Construction Type</a>
+            <a href="createaddmaterial">Create Add Material</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Transaction
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="task_assignmenttran/">Task Assignment</a>
+            <a href="tasks_search/">Customer Site Task List</a>
+            <a href="assignee_tasks/">Assignee Task List</a>
+            <a href="createinternaltransfer/">Create Internal Transfer</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Sales
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="client_inquiry/">Client Inquiry</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Registration
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="createempregistration">Create Employee Registration</a>
+            <a href="client_reg/">Client Registration</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Other
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="vendor-registration/">Vendor Registration</a>
+            <a href="rough_drawing/">Rough Drawing</a>
+            <a href="final_drawing/">Final Drawing</a>
+            <a href="progress/">Add Work Progress</a>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <h1>Welcome to MITNEXT PVT.LTD</h1>
+    <p>This is a  landing page.</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+ 
+
+<table border="1">
+    <tr>
+        <th>client name</th>
+        <th>representative name</th>
+        <th>phone no</th>
+        <th>email</th>
+        <th>site address</th>
+        <th>inquiry date</th>
+        <th>update</th>
+    </tr>
+    {%for i in regs %}
+    <tr>
+        <td>{{i.client_name}}</td>
+        <td>{{i.representative_name}}</td>
+        <td>{{i.phone_no}}</td>
+        <td>{{i.email}}</td>
+        <td>{{i.site_address}}</td>
+        <td>{{i.inquiry_date}}</td>
+        <td> <a href="/update_clientreg/{{i.id}}"> update</a>
+            <a href="/delete_clientreg/{{i.id}}"> delete</a></td>
+
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Work Progress</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form label {
+            margin-bottom: 5px;
+            color: #555;
+        }
+        form input, form textarea, form button {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        form input[type="file"] {
+            padding: 5px;
+        }
+        form input[type="range"] {
+            padding: 0;
+        }
+        form span {
+            margin-top: -10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+        form button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add Work Progress</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="id_photo">Add photos</label>
+            <input type="file" name="photo" id="id_photo">
+
+            <label for="id_progress">Update percentage work done</label>
+            <input type="range" name="progress" id="id_progress" min="0" max="100" value="0" oninput="document.getElementById('progress_value').innerText = this.value + '%'">
+            <span id="progress_value">0%</span>
+
+            <label for="id_worker_count">Update number of workers came</label>
+            <input type="number" name="worker_count" id="id_worker_count" min="0">
+
+            <label for="id_description">Add remark (optional)</label>
+            <textarea name="description" id="id_description"></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+
+
+<table border="2">
+    <tr align="center">
+        <th>Unit Name</th>
+        <th>Actions</th>
+    </tr>
+    {%for i in units %}
+    <tr align="center">
+        <td>{{i.unitmeasurementname}}</td>
+        <td> <a href="/updateunit/{{i.unitmeasurementid}}"> update</a>
+            <a href="/deleteunit/{{i.unitmeasurementid}}"> delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

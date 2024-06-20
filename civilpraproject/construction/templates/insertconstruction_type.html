@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Branch master</title>
+
+</head>
+<body>
+<form method="POST" action="" >
+    {%csrf_token%}
+<table border="2">
+
+    <tr>
+        <td>
+            <label>construction type </label>
+
+        </td>
+        <td>
+            <input type="text" name="con_type" id="con_type" placeholder="enter the construction type" >
+        </td>
+    </tr>
+ <tr>
+        <td>
+            <label>description </label>
+
+        </td>
+        <td>
+            <input type="text" name="description" id="description" placeholder="enter the description" >
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center">
+            <input type="submit" name="btnsubmit" id="btnsubmit" value="save">
+            <input type="submit" name="btnsubmit" id="btncanal " value="Cancal">  </td>
+    </tr>
+</table>
+</form>
+
+
+</body>

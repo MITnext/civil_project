@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BRAND List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 2px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <tr>
+        <th>EXECUTIVE ENGINEER</th>
+        <th>EXECUTIVE ENGINEER NO</th>
+        <th>SOURCE CLIENT NAME</th>
+        <th>SOURCE ADDRESS</th>
+        <th>DESTINATION CLIENT NAME</th>
+        <th>DESTINATION ADDRESS</th>
+        <th>VEHICLE NAME</th>
+        <th>VEHICLE NO</th>
+        <th>DRIVER NAME</th>
+        <th>DRIVER NO</th>
+        <th>DATE</th>
+        <th>MATERIAL</th>
+        <th>BRAND</th>
+        <th>UNIT</th>
+        <th>QUANTITY</th>
+        <th>TRANSFER DATE</th>
+        <th>ACTION</th>
+    </tr>
+    {% for i in internals %}
+    <tr>
+        <td>{{ i.executiveengineer }}</td>
+        <td>{{ i.executiveengineernum }}</td>
+        <td>{{ i.sourceclientname }}</td>
+        <td>{{ i.sourceaddress }}</td>
+        <td>{{ i.destinationclientname }}</td>
+        <td>{{ i.destinationaddress }}</td>
+        <td>{{ i.vehiclename }}</td>
+        <td>{{ i.vehiclenum }}</td>
+        <td>{{ i.drivername }}</td>
+        <td>{{ i.drivernum }}</td>
+        <td>{{ i.date }}</td>
+        <td>{{ i.material }}</td>
+        <td>{{ i.brand }}</td>
+        <td>{{ i.unit }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.transferdate }}</td>
+        <td>
+            <a href="/updateinternaltransfer/{{ i.id }}">update</a>
+            <a href="/deleteinternaltransfer/{{ i.id }}">delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

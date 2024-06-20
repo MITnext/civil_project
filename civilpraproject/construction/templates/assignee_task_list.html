@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assignee Task List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .searchable-select {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .searchable-select input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .searchable-select ul {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .searchable-select ul li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .searchable-select ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script>
+        function filterOptions(input) {
+            var filter = input.value.toUpperCase();
+            var ul = input.nextElementSibling;
+            var li = ul.getElementsByTagName('li');
+            for (var i = 0; i < li.length; i++) {
+                var txtValue = li[i].textContent || li[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        function toggleDropdown(input) {
+            var ul = input.nextElementSibling;
+            ul.style.display = ul.style.display === 'none' || ul.style.display === '' ? 'block' : 'none';
+        }
+
+        function selectOption(name, id, inputId, selectId) {
+            var input = document.getElementById(inputId);
+            input.value = name;
+            var select = document.getElementById(selectId);
+            select.value = id;
+            document.forms[0].submit();
+        }
+
+        document.addEventListener('click', function(e) {
+            var searchInputs = document.querySelectorAll('.searchable-select input');
+            searchInputs.forEach(function(input) {
+                if (!input.contains(e.target)) {
+                    input.nextElementSibling.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Assignee Task List</h1>
+
+    <form method="GET">
+        <label for="assign_to_name">Assignee:</label>
+        <div class="searchable-select">
+            <input type="text" id="assign_to_name" name="assign_to_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" value="{% for assignee in assignees %}{% if assignee.id|stringformat:"s" == selected_assignee|stringformat:"s" %}{{ assignee.assign_name }}{% endif %}{% endfor %}">
+            <ul id="assignee-list">
+                {% for assignee in assignees %}
+                <li onclick="selectOption('{{ assignee.employee_name }}', '{{ assignee.id }}', 'assign_to_name', 'assign_to')">{{ assignee.employee_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <select id="assign_to" name="assign_to" style="display: none;">
+            {% for assignee in assignees %}
+            <option value="{{ assignee.id }}" {% if assignee.id|stringformat:"s" == selected_assignee|stringformat:"s" %}selected{% endif %}>{{ assignee.assign_name }}></option>
+            {% endfor %}
+        </select>
+
+        <label for="customer_name">Customer:</label>
+        <div class="searchable-select">
+            <input type="text" id="customer_name" name="customer_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" value="{% for customer in customers %}{% if customer.id|stringformat:"s" == selected_customer|stringformat:"s" %}{{ customer.customer_name }}{% endif %}{% endfor %}">
+            <ul id="customer-list">
+                {% for customer in customers %}
+                <li onclick="selectOption('{{ customer.customer_name }}', '{{ customer.id }}', 'customer_name', 'customer')">{{ customer.customer_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <select id="customer" name="customer" style="display: none;">
+            {% for customer in customers %}
+            <option value="{{ customer.id }}" {% if customer.id|stringformat:"s" == selected_customer|stringformat:"s" %}selected{% endif %}>{{ customer.customer_name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="site_name">Site:</label>
+        <div class="searchable-select">
+            <input type="text" id="site_name" name="site_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" value="{% for site in sites %}{% if site.id|stringformat:"s" == selected_site|stringformat:"s" %}{{ site.site_name }}{% endif %}{% endfor %}">
+            <ul id="site-list">
+                {% for site in sites %}
+                <li onclick="selectOption('{{ site.site_name }}', '{{ site.id }}', 'site_name', 'site')">{{ site.site_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <select id="site" name="site" style="display: none;">
+            {% for site in sites %}
+            <option value="{{ site.id }}" {% if site.id|stringformat:"s" == selected_site|stringformat:"s" %}selected{% endif %}>{{ site.site_name }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <h2>Tasks</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.task.constructionlevelname }}</td>
+                    <td>{{ task.start_date }}</td>
+                    <td>{{ task.end_date }}</td>
+                    <td>{{ task.state }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No tasks found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

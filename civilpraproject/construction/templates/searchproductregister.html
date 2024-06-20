@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<table border="2">
+    <tr align="center">
+        <th colspan="3">PRODUCT REGISTRATION</th>
+    </tr>
+    <tr align="center">
+        <th>PRODUCT</th>
+        <th>Description</th>
+        <th>ACTION</th>
+    </tr>
+    {%for i in products %}
+    <tr align="center">
+        <td>{{i.productss}}</td>
+        <td>{{i.descriptions}}</td>
+        <td> <a href="/updateproductregister/{{i.id}}"> update</a>
+            <a href="/deleteproductregister/{{i.id}}"> delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+{% endblock %}
