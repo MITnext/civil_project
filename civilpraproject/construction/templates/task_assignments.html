@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .cross-button {
+            background-color: #ff4d4d;
+            padding: 5px 10px;
+        }
+        .cross-button:hover {
+            background-color: #ff1a1a;
+        }
+        .searchable-select {
+            position: relative;
+        }
+        .searchable-select input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+        .searchable-select ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            display: none;
+            background-color: white;
+            z-index: 1;
+        }
+        .searchable-select ul li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .searchable-select ul li:hover {
+            background-color: #f2f2f2;
+        }
+        .disabled {
+            background-color: #e9e9e9;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <form id="taskForm" method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td><label>Customer</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="customer" name="customer_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul id="customer-list">
+                            {% for i in customer_name %}
+                            <li onclick="selectCustomer('{{ i.customer_name }}', '{{ i.id }}')">{{ i.customer_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td><label>Site</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="site" name="site_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul id="site-list">
+                            <!-- Site options will be dynamically populated here -->
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Task</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="task" name="task_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul>
+                            {% for i in tasks %}
+                            <li onclick="selectOption(this, '{{ i }}', '{{ i.id }}')">{{ i }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td><label>Assign To</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="assign_to" name="assign_to_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul>
+                            {% for i in employees %}
+                            <li onclick="selectOption(this, '{{ i.employee_name }}', '{{ i.id }}')">{{ i.employee_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Assign Two</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="assign_two" name="assign_two_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul>
+                            {% for i in employees %}
+                            <li onclick="selectOption(this, '{{ i.employee_name }}', '{{ i.id }}')">{{ i.employee_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td><label>Assign Three</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="assign_three" name="assign_three_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul>
+                            {% for i in employees %}
+                            <li onclick="selectOption(this, '{{ i.employee_name }}', '{{ i.id }}')">{{ i.employee_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Start Date</label></td>
+                <td><input type="date" id="start_date" name="start_date"></td>
+                <td><label>End Date</label></td>
+                <td><input type="date" id="end_date" name="end_date"></td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <button type="button" onclick="addTask()">Add</button>
+                    <button type="button" onclick="saveTasks()">Save</button>
+                    <input type="hidden" name="taskData" id="taskData">
+                    <input type="hidden" name="customer_id" id="customer_id">
+                    <input type="hidden" name="site_id" id="site_id">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Assign To</th>
+                <th>Assign Two</th>
+                <th>Assign Three</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>State</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="taskList"></tbody>
+    </table>
+    <script>
+        let taskList = [];
+
+        function addTask() {
+            const customerSelect = document.getElementById('customer');
+            const siteSelect = document.getElementById('site');
+            const taskSelect = document.getElementById('task');
+            const assigneeSelect = document.getElementById('assign_to');
+            const assignTwoSelect = document.getElementById('assign_two');
+            const assignThreeSelect = document.getElementById('assign_three');
+            const startDateInput = document.getElementById('start_date');
+            const endDateInput = document.getElementById('end_date');
+
+            const customer = customerSelect.dataset.id;
+            const customerName = customerSelect.value;
+            const site = siteSelect.dataset.id;
+            const siteName = siteSelect.value;
+            const task = taskSelect.dataset.id;
+            const taskName = taskSelect.value;
+            const assignee = assigneeSelect.dataset.id;
+            const assigneeName = assigneeSelect.value;
+            const assignTwo = assignTwoSelect.dataset.id || null;
+            const assignTwoName = assignTwoSelect.value || null;
+            const assignThree = assignThreeSelect.dataset.id || null;
+            const assignThreeName = assignThreeSelect.value || null;
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+
+            if (customer === "" || site === "" || task === "" || assignee === "" || !startDate || !endDate) {
+                alert("Please select all mandatory fields");
+                return;
+            }
+
+            const existingTask = taskList.find(item => item.taskName === taskName);
+            if (existingTask) {
+                alert("Task already exists in the list");
+                return;
+            }
+
+            const taskItem = {
+                customerId: customer,
+                customerName: customerName,
+                siteId: site,
+                siteName: siteName,
+                taskId: task,
+                taskName: taskName,
+                assignToId: assignee,
+                assigneeName: assigneeName,
+                assignTwoId: assignTwo,
+                assignTwoName: assignTwoName,
+                assignThreeId: assignThree,
+                assignThreeName: assignThreeName,
+                startDate: startDate,
+                endDate: endDate,
+                state: 'assign'
+            };
+
+            taskList.push(taskItem);
+            renderTaskList();
+            disableCustomerAndSiteSelection();
+            clearForm();
+        }
+
+        function renderTaskList() {
+            const taskListElement = document.getElementById('taskList');
+            taskListElement.innerHTML = '';
+            taskList.forEach((task, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${task.taskName}</td>
+                    <td>${task.assigneeName}</td>
+                    <td>${task.assignTwoName || ''}</td>
+                    <td>${task.assignThreeName || ''}</td>
+                    <td>${task.startDate}</td>
+                    <td>${task.endDate}</td>
+                    <td>${task.state}</td>
+                    <td><button type="button" class="cross-button" onclick="removeTask(${index})">X</button></td>
+                `;
+                taskListElement.appendChild(row);
+            });
+        }
+
+        function removeTask(index) {
+            taskList.splice(index, 1);
+            renderTaskList();
+            if (taskList.length === 0) {
+                enableCustomerAndSiteSelection();
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('task').value = '';
+            document.getElementById('task').dataset.id = '';
+            document.getElementById('assign_to').value = '';
+            document.getElementById('assign_to').dataset.id = '';
+            document.getElementById('assign_two').value = '';
+            document.getElementById('assign_two').dataset.id = '';
+            document.getElementById('assign_three').value = '';
+            document.getElementById('assign_three').dataset.id = '';
+            document.getElementById('start_date').value = '';
+            document.getElementById('end_date').value = '';
+        }
+
+        function saveTasks() {
+            const taskDataInput = document.getElementById('taskData');
+            const customerInput = document.getElementById('customer');
+            const siteInput = document.getElementById('site');
+            const customerIdInput = document.getElementById('customer_id');
+            const siteIdInput = document.getElementById('site_id');
+
+            taskDataInput.value = JSON.stringify(taskList);
+            customerIdInput.value = customerInput.dataset.id;
+            siteIdInput.value = siteInput.dataset.id;
+            document.getElementById('taskForm').submit();
+        }
+
+        function filterOptions(input) {
+            const filter = input.value.toLowerCase();
+            const ul = input.nextElementSibling;
+            const li = ul.getElementsByTagName('li');
+            for (let i = 0; i < li.length; i++) {
+                const textValue = li[i].textContent || li[i].innerText;
+                if (textValue.toLowerCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        function toggleDropdown(input) {
+            const ul = input.nextElementSibling;
+            ul.style.display = ul.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function selectOption(li, name, id) {
+            const input = li.parentElement.previousElementSibling;
+            input.value = name;
+            input.dataset.id = id;
+            li.parentElement.style.display = 'none';
+        }
+
+        function selectCustomer(name, id) {
+            const customerInput = document.getElementById('customer');
+            customerInput.value = name;
+            customerInput.dataset.id = id;
+            document.getElementById('customer-list').style.display = 'none';
+
+            fetch(`/get_sites/${id}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const siteList = document.getElementById('site-list');
+                    siteList.innerHTML = '';
+                    data.forEach(site => {
+                        const li = document.createElement('li');
+                        li.textContent = site.site_name;
+                        li.onclick = () => selectOption(li, site.site_name, site.id);
+                        siteList.appendChild(li);
+                    });
+                });
+        }
+
+        function disableCustomerAndSiteSelection() {
+            document.getElementById('customer').classList.add('disabled');
+            document.getElementById('site').classList.add('disabled');
+        }
+
+        function enableCustomerAndSiteSelection() {
+            document.getElementById('customer').classList.remove('disabled');
+            document.getElementById('site').classList.remove('disabled');
+        }
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = event.target.closest('.searchable-select');
+            if (!isClickInside) {
+                const dropdowns = document.querySelectorAll('.searchable-select ul');
+                dropdowns.forEach(dropdown => dropdown.style.display = 'none');
+            }
+        });
+    </script>
+</body>
+</html>

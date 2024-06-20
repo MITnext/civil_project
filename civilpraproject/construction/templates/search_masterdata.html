@@ -1,0 +1,20 @@
+ 
+
+<table border="1">
+    <tr>
+        <th>customer</th>
+        <th>site</th>
+        <th>created_at</th>
+        <th>update</th>
+    </tr>
+    {%for i in data %}
+    <tr>
+        <td>{{i.customer}}</td>
+        <td>{{i.site}}</td>
+        <td>{{i.created_at}}</td>
+        <td> <a href="/update_masterdata/{{i.id}}"> update</a>
+            <a href="/delete_masterdata/{{i.id}}"> delete</a></td>
+
+    </tr>
+    {% endfor %}
+</table>

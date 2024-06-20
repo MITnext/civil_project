@@ -1,0 +1,21 @@
+
+
+<table border="2">
+    <tr align="center">
+        <th colspan="3">CONSTRUCTION LEVEL</th>
+    </tr>
+    <tr align="center">
+        <th>Construction LEVEL</th>
+        <th>Description</th>
+    </tr>
+    {%for i in levels %}
+    <tr align="center">
+        <td>{{i.constructionlevelname}}</td>
+        <td>{{i.description}}</td>
+        <td> <a href="/updateconstructionlevel/{{i.id}}"> update</a>
+            <a href="/deleteconstructionlevel/{{i.id}}"> delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

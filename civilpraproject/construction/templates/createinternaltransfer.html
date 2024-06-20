@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Internal Transfer Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .cross-button {
+            background-color: #ff4d4d;
+            padding: 5px 10px;
+        }
+
+        .cross-button:hover {
+            background-color: #ff1a1a;
+        }
+
+        .searchable-select {
+            position: relative;
+        }
+
+        .searchable-select input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+
+        .searchable-select ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            display: none;
+            background-color: white;
+            z-index: 1;
+        }
+
+        .searchable-select ul li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .searchable-select ul li:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        let transferList = [];
+
+        function addTransfer() {
+            const executiveEngineerInput = document.getElementById('executiveEngineer');
+            const executiveEngineerNumInput = document.getElementById('executiveEngineerNum');
+            const sourceClientNameInput = document.getElementById('sourceClientName');
+            const sourceAddressInput = document.getElementById('sourceAddress');
+            const destinationClientNameInput = document.getElementById('destinationClientName');
+            const destinationAddressInput = document.getElementById('destinationAddress');
+            const vehicleNameInput = document.getElementById('vehicleName');
+            const vehicleNumInput = document.getElementById('vehicleNum');
+            const driverNameInput = document.getElementById('driverName');
+            const driverNumInput = document.getElementById('driverNum');
+            const dateInput = document.getElementById('date');
+            const materialSelect = document.getElementById('material');
+            const brandSelect = document.getElementById('brand');
+            const unitSelect = document.getElementById('unit');
+            const quantityInput = document.getElementById('quantity');
+            const transferDateInput = document.getElementById('transferDate');
+
+            const material = materialSelect.dataset.value;
+            const materialName = materialSelect.value;
+            const brand = brandSelect.dataset.value;
+            const brandName = brandSelect.value;
+            const unit = unitSelect.dataset.value;
+            const unitName = unitSelect.value;
+            const quantity = quantityInput.value;
+
+            if (!executiveEngineerInput.value || !executiveEngineerNumInput.value || !sourceClientNameInput.value ||
+                !sourceAddressInput.value || !destinationClientNameInput.value || !destinationAddressInput.value ||
+                !vehicleNameInput.value || !vehicleNumInput.value || !driverNameInput.value || !driverNumInput.value ||
+                !dateInput.value || material === "select Name" || brand === "select Name" || unit === "select Name" ||
+                !quantity || !transferDateInput.value) {
+                alert("Please fill out all fields");
+                return;
+            }
+            const existingMaterial = transferList.find(item => item.materialName === materialName);
+            if (existingMaterial) {
+                alert("Material already exists in the list");
+                return;
+            }
+
+            const transferItem = {
+                executiveEngineer: executiveEngineerInput.value,
+                executiveEngineerNum: executiveEngineerNumInput.value,
+                sourceClientName: sourceClientNameInput.value,
+                sourceAddress: sourceAddressInput.value,
+                destinationClientName: destinationClientNameInput.value,
+                destinationAddress: destinationAddressInput.value,
+                vehicleName: vehicleNameInput.value,
+                vehicleNum: vehicleNumInput.value,
+                driverName: driverNameInput.value,
+                driverNum: driverNumInput.value,
+                date: dateInput.value,
+                materialId: material,
+                materialName: materialName,
+                brandId: brand,
+                brandName: brandName,
+                unitId: unit,
+                unitName: unitName,
+                quantity: quantity,
+                transferDate: transferDateInput.value
+            };
+
+            transferList.push(transferItem);
+            updateTransferList();
+            disableFields();
+            resetForm();
+        }
+
+        function updateTransferList() {
+            const transferListContainer = document.getElementById('transferList');
+            transferListContainer.innerHTML = '';
+
+            transferList.forEach((transfer, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transfer.executiveEngineer}</td>
+                    <td>${transfer.executiveEngineerNum}</td>
+                    <td>${transfer.sourceClientName}</td>
+                    <td>${transfer.sourceAddress}</td>
+                    <td>${transfer.destinationClientName}</td>
+                    <td>${transfer.destinationAddress}</td>
+                    <td>${transfer.vehicleName}</td>
+                    <td>${transfer.vehicleNum}</td>
+                    <td>${transfer.driverName}</td>
+                    <td>${transfer.driverNum}</td>
+                    <td>${transfer.date}</td>
+                    <td>${transfer.materialName}</td>
+                    <td>${transfer.brandName}</td>
+                    <td>${transfer.unitName}</td>
+                    <td>${transfer.quantity}</td>
+                    <td>${transfer.transferDate}</td>
+                    <td><button type="button" class="cross-button" onclick="removeTransfer(${index})">&times;</button></td>
+                `;
+                transferListContainer.appendChild(row);
+            });
+
+            if (transferList.length === 0) {
+                enableFields();
+            }
+        }
+
+        function removeTransfer(index) {
+            transferList.splice(index, 1);
+            updateTransferList();
+        }
+
+        function saveTransfers() {
+            document.getElementById('transferData').value = JSON.stringify(transferList);
+            document.getElementById('transferForm').submit();
+        }
+
+        function resetForm() {
+            document.getElementById('material').value = '';
+            document.getElementById('material').dataset.value = 'select Name';
+            document.getElementById('brand').value = '';
+            document.getElementById('brand').dataset.value = 'select Name';
+            document.getElementById('unit').value = '';
+            document.getElementById('unit').dataset.value = 'select Name';
+            document.getElementById('quantity').value = '';
+        }
+
+        function disableFields() {
+            const fieldsToDisable = document.querySelectorAll('.disable-on-add');
+            fieldsToDisable.forEach(field => field.disabled = true);
+        }
+
+        function enableFields() {
+            const fieldsToDisable = document.querySelectorAll('.disable-on-add');
+            fieldsToDisable.forEach(field => field.disabled = false);
+            document.getElementById('executiveEngineer').value = '';
+            document.getElementById('executiveEngineerNum').value = '';
+            document.getElementById('sourceClientName').value = '';
+            document.getElementById('sourceAddress').value = '';
+            document.getElementById('destinationClientName').value = '';
+            document.getElementById('destinationAddress').value = '';
+            document.getElementById('vehicleName').value = '';
+            document.getElementById('vehicleNum').value = '';
+            document.getElementById('driverName').value = '';
+            document.getElementById('driverNum').value = '';
+            document.getElementById('date').value = '';
+            document.getElementById('transferDate').value = '';
+        }
+
+        function toggleDropdown(element) {
+            const dropdown = element.nextElementSibling;
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function filterOptions(element) {
+            const filter = element.value.toLowerCase();
+            const options = element.nextElementSibling.getElementsByTagName('li');
+            for (let i = 0; i < options.length; i++) {
+                const txtValue = options[i].textContent || options[i].innerText;
+                options[i].style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
+            }
+        }
+
+        function selectOption(element, value, id) {
+            const input = element.closest('.searchable-select').getElementsByTagName('input')[0];
+            input.value = value;
+            input.dataset.value = id;
+            element.parentElement.style.display = 'none';
+
+            if (input.id === 'material') {
+                fetchBrandsByMaterial(id);
+            }
+        }
+
+        function fetchBrandsByMaterial(materialId) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/get_brands_by_material/?material_id=${materialId}`, true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const brands = JSON.parse(xhr.responseText);
+                    const brandSelect = document.getElementById('brand');
+                    const brandDropdown = brandSelect.nextElementSibling;
+                    brandDropdown.innerHTML = '';
+                    brands.forEach(brand => {
+                        const brandOption = document.createElement('li');
+                        brandOption.textContent = brand.brandname;
+                        brandOption.setAttribute('onclick', `selectOption(this, '${brand.brandname}', '${brand.id}')`);
+                        brandDropdown.appendChild(brandOption);
+                    });
+                    brandSelect.value = '';
+                    brandSelect.dataset.value = 'select Name';
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+<form id="transferForm" method="POST" action="">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td><label>Executive Engineer</label></td>
+            <td><input type="text" id="executiveEngineer" name="executiveEngineer" class="disable-on-add"></td>
+            <td><label>Engineer Number</label></td>
+            <td><input type="number" id="executiveEngineerNum" name="executiveEngineerNum" class="disable-on-add"></td>
+        </tr>
+        <tr>
+            <td><label>Source Client Name</label></td>
+            <td><input type="text" id="sourceClientName" name="sourceClientName" class="disable-on-add"></td>
+            <td><label>Source Address</label></td>
+            <td><input type="text" id="sourceAddress" name="sourceAddress" class="disable-on-add"></td>
+        </tr>
+        <tr>
+            <td><label>Destination Client Name</label></td>
+            <td><input type="text" id="destinationClientName" name="destinationClientName" class="disable-on-add"></td>
+            <td><label>Destination Address</label></td>
+            <td><input type="text" id="destinationAddress" name="destinationAddress" class="disable-on-add"></td>
+        </tr>
+        <tr>
+            <td><label>Vehicle Name</label></td>
+            <td><input type="text" id="vehicleName" name="vehicleName" class="disable-on-add"></td>
+            <td><label>Vehicle Number</label></td>
+            <td><input type="text" id="vehicleNum" name="vehicleNum" class="disable-on-add"></td>
+        </tr>
+        <tr>
+            <td><label>Driver Name</label></td>
+            <td><input type="text" id="driverName" name="driverName" class="disable-on-add"></td>
+            <td><label>Driver Number</label></td>
+            <td><input type="number" id="driverNum" name="driverNum" class="disable-on-add"></td>
+        </tr>
+        <tr>
+            <td><label>Date</label></td>
+            <td><input type="date" id="date" name="date" class="disable-on-add"></td>
+        </tr>
+        <tr>
+            <td><label>Material</label></td>
+            <td>
+                <div class="searchable-select">
+                    <input type="text" id="material" name="material" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-value="select Name">
+                    <ul>
+                        {% for i in material_list %}
+                        <li onclick="selectOption(this, '{{i.materialname}}', '{{i.materialid}}')">{{i.materialname}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </td>
+            <td><label>Brand</label></td>
+            <td>
+                <div class="searchable-select">
+                    <input type="text" id="brand" name="brand" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-value="select Name">
+                    <ul>
+                        <!-- Options will be dynamically populated based on selected material -->
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Units</label></td>
+            <td>
+                <div class="searchable-select">
+                    <input type="text" id="unit" name="unit" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-value="select Name">
+                    <ul>
+                        {% for i in unit_list %}
+                        <li onclick="selectOption(this, '{{i.unitmeasurementname}}', '{{i.unitmeasurementid}}')">{{i.unitmeasurementname}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </td>
+            <td><label>Quantity</label></td>
+            <td><input type="number" id="quantity" name="quantity"></td>
+        </tr>
+        <tr>
+            <td><label>Transfer Date</label></td>
+            <td><input type="datetime-local" id="transferDate" name="transferDate"></td>
+            <td colspan="2" align="center">
+                <button type="button" onclick="addTransfer()">Add</button>
+                <input type="hidden" name="transferData" id="transferData">
+            </td>
+        </tr>
+    </table>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>Executive Engineer</th>
+            <th>Engineer Number</th>
+            <th>Source Client Name</th>
+            <th>Source Address</th>
+            <th>Destination Client Name</th>
+            <th>Destination Address</th>
+            <th>Vehicle Name</th>
+            <th>Vehicle Number</th>
+            <th>Driver Name</th>
+            <th>Driver Number</th>
+            <th>Date</th>
+            <th>Material</th>
+            <th>Brand</th>
+            <th>Units</th>
+            <th>Quantity</th>
+            <th>Transfer Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="transferList">
+    </tbody>
+</table>
+<div style="text-align: center;">
+    <button type="button" onclick="saveTransfers()">Save</button>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

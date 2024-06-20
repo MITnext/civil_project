@@ -1,0 +1,17 @@
+
+
+<table border="2">
+    <tr align="center">
+        <th>Material-Name</th>
+        <th>Action</th>
+    </tr>
+    {%for i in materials %}
+    <tr align="center">
+        <td>{{i.materialname}}</td>
+        <td> <a href="/updatematerial/{{i.materialid}}"> update</a>
+            <a href="/deletematerial/{{i.materialid}}"> delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

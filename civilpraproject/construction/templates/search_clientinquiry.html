@@ -1,0 +1,28 @@
+ 
+
+<table border="1">
+    <tr>
+        <th>client name</th>
+        <th>representative name</th>
+        <th>address</th>
+        <th>date</th>
+        <th>follow_off_date</th>
+        <th>construction_type</th>
+        <th>remark</th>
+        <th>update</th>
+    </tr>
+    {%for i in inq %}
+    <tr>
+        <td>{{i.client_name}}</td>
+        <td>{{i.representative_name}}</td>
+        <td>{{i.address}}</td>
+        <td>{{i.date}}</td>
+        <td>{{i.follow_off_date}}</td>
+        <td>{{i.construction_type}}</td>
+        <td>{{i.remark}}</td>
+        <td> <a href="/update_clientinquiry/{{i.id}}"> update</a>
+            <a href="/delete_clientinquiry/{{i.id}}"> delete</a></td>
+
+    </tr>
+    {% endfor %}
+</table>

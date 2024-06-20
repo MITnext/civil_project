@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vendor Registration</title>
+</head>
+<body>
+<form method="POST" action="" >
+    {%csrf_token%}
+<table border="2">
+
+ <tr>
+        <td>
+            <label>project Name </label>
+
+        </td>
+        <td>
+            <input type="text" id="projectname" name="projectname" placeholder="enter the project name " required>
+        </td>
+ </tr>
+    <tr>
+        <td>
+            <label>client name </label>
+
+        </td>
+        <td>
+            <input type="text" id="clientname" name="clientname" placeholder="enter the client name " required>
+        </td>
+ </tr>
+     <tr>
+        <td>
+            <label>executive_engg_name </label>
+
+        </td>
+        <td>
+            <input type="text" id="executiveenggname" name="executiveenggname" placeholder="enter the executive engg name " required>
+        </td>
+ </tr>
+    <tr>
+        <td>
+            <label>date_of_submission </label>
+
+        </td>
+        <td>
+            <input type="date" id="dateofsubmission" name="dateofsubmission" placeholder="enter the date of submission " required>
+        </td>
+ </tr>
+     <tr>
+        <td>
+            <label>drawing_count </label>
+
+        </td>
+        <td>
+            <input type="number" id="drawingcount" name="drawingcount" placeholder="enter the drawing count " required>
+        </td>
+ </tr>
+     <tr>
+        <td>
+            <label>description </label>
+
+        </td>
+        <td>
+            <textarea id="description" name="description" placeholder="enter thedescription" ></textarea>
+        </td>
+ </tr>
+    <tr>
+        <td colspan="2" align="center">
+            <input type="submit" name="btnsubmit" id="btnsubmit" value="save">
+            <input type="submit" name="btnsubmit" id="btncanal " value="Cancal">  </td>
+    </tr>
+</table>
+</form>
+</body>
+

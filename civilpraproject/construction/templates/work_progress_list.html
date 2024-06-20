@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Work Progress List</title>
+</head>
+<body>
+    <h1>Work Progress List</h1>
+    <ul>
+        {% for progress in progress_list %}
+            <li>
+                <img src="{{ progress.photo.url }}" alt="Work photo" style="max-width: 200px;">
+                <p>Progress: {{ progress.progress }}%</p>
+                <p>Worker Count: {{ progress.worker_count }}</p>
+                <p>Description: {{ progress.description }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

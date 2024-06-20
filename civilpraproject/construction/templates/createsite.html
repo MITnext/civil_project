@@ -1,0 +1,330 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Site</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--            background-color: #f4f4f4;-->
+<!--        }-->
+
+<!--        header, footer {-->
+<!--            background-color: #333;-->
+<!--            color: white;-->
+<!--            text-align: center;-->
+<!--            padding: 1em;-->
+<!--        }-->
+
+<!--        form {-->
+<!--            max-width: 500px;-->
+<!--            margin: 50px auto;-->
+<!--            padding: 20px;-->
+<!--            background-color: #fff;-->
+<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);-->
+<!--            border-radius: 10px;-->
+<!--        }-->
+
+<!--        table {-->
+<!--            width: 100%;-->
+<!--            border-collapse: collapse;-->
+<!--            margin-bottom: 15px;-->
+<!--        }-->
+
+<!--        td {-->
+<!--            padding: 10px;-->
+<!--        }-->
+
+<!--        label {-->
+<!--            font-weight: bold;-->
+<!--            display: block;-->
+<!--            margin-bottom: 5px;-->
+<!--        }-->
+
+<!--        input[type="text"],-->
+<!--        input[type="number"] {-->
+<!--            width: 100%;-->
+<!--            padding: 8px;-->
+<!--            margin-bottom: 10px;-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+
+<!--        input[type="number"]::-webkit-outer-spin-button,-->
+<!--        input[type="number"]::-webkit-inner-spin-button {-->
+<!--            -webkit-appearance: none;-->
+<!--            margin: 0;-->
+<!--        }-->
+
+<!--        input[type="number"] {-->
+<!--            -moz-appearance: textfield;-->
+<!--        }-->
+
+<!--        input[type="submit"],-->
+<!--        input[type="button"] {-->
+<!--            background-color: #4caf50;-->
+<!--            color: white;-->
+<!--            padding: 10px 15px;-->
+<!--            border: none;-->
+<!--            border-radius: 3px;-->
+<!--            cursor: pointer;-->
+<!--            width: 48%;-->
+<!--            margin: 1%;-->
+<!--        }-->
+
+<!--        input[type="submit"]:hover,-->
+<!--        input[type="button"]:hover {-->
+<!--            background-color: #45a049;-->
+<!--        }-->
+
+<!--        .form-buttons {-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        .form-buttons input {-->
+<!--            width: 48%;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <form id="" method="POST" action="">-->
+<!--        {% csrf_token %}-->
+<!--        <div>-->
+<!--            <table border="2">-->
+<!--                <tr><th align="center" colspan="4">CREATE SITE</th></tr>-->
+<!--                <tr>-->
+<!--                    <td align="center">-->
+<!--                        <label for="sitename">Site Name:</label>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <input type="text" name="sitename" id="sitename" placeholder="Enter Site Name">-->
+<!--                    </td>-->
+<!--                    <td align="center">-->
+<!--                        <label for="ownername">Owner Name:</label>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <input type="text" name="ownername" id="ownername" placeholder="Enter Owner Name">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td align="center">-->
+<!--                        <label for="phoneno">Phone Number:</label>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <input type="number" name="phoneno" id="phoneno" placeholder="Enter Phone Number">-->
+<!--                    </td>-->
+<!--                    <td align="center">-->
+<!--                        <label for="pincode">Pincode:</label>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <input type="number" name="pincode" id="pincode" placeholder="Enter Pincode">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td align="center">-->
+<!--                        <label for="state">State:</label>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <input type="text" name="state" id="state" placeholder="Enter State">-->
+<!--                    </td>-->
+<!--                    <td align="center">-->
+<!--                        <label for="city">City:</label>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <input type="text" name="city" id="city" placeholder="Enter City">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td align="center">-->
+<!--                        <label for="houseno">House Number:</label>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <input type="text" name="houseno" id="houseno" placeholder="Enter House Number">-->
+<!--                    </td>-->
+<!--                    <td align="center">-->
+<!--                        <label for="roadname">Road Name:</label>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <input type="text" name="roadname" id="roadname" placeholder="Enter Road Name">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td align="center">-->
+<!--                        <label for="address">Address:</label>-->
+<!--                    </td>-->
+<!--                    <td colspan="3">-->
+<!--                        <input type="text" name="address" id="address" placeholder="Enter Address">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr class="form-buttons">-->
+<!--                    <td colspan="2">-->
+<!--                      <input type="submit" value="Submit"></td>-->
+<!--                    <td colspan="2">-->
+<!--                        <input type="button" name="btncancel" id="btncancel" value="Cancel" onclick="window.location.href='/searchsite/'">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header, footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center; /* Center align form content */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 102%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        input[type="submit"],
+        input[type="button"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 120px; /* Set fixed width for buttons */
+            margin: 0 10px; /* Add some margin between buttons */
+        }
+
+        input[type="submit"]:hover,
+        input[type="button"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <form id="" method="POST" action="">
+        {% csrf_token %}
+        <div>
+            <table border="2">
+                <tr><th align="center" colspan="4">CREATE SITE</th></tr>
+                <tr>
+                    <td align="center">
+                        <label for="site_name">Site Name:</label>
+                    </td>
+                    <td>
+                        <input type="text" name="site_name" id="site_name" placeholder="Enter Site Name">
+                    </td>
+            <td align="center">
+                <label>OWNER NAME:</label>
+            </td>
+            <td>
+              <select id = "customer" name = "customer">
+                  <option> Select Name </option>
+                  {% for i in customer_name %}
+                  <option value="{{i.id}}">{{i.customer_name}}</option>
+                  {% endfor %}
+              </select>
+            </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <label for="pincode">Pincode:</label>
+                    </td>
+                    <td>
+                        <input type="number" name="pincode" id="pincode" placeholder="Enter Pincode">
+                    </td>
+                    <td align="center">
+                        <label for="state">State:</label>
+                    </td>
+                    <td>
+                        <input type="text" name="state" id="state" placeholder="Enter State">
+                    </td>
+                    <tr>
+                    <td align="center">
+                        <label for="city">City:</label>
+                    </td>
+                    <td>
+                        <input type="text" name="city" id="city" placeholder="Enter City">
+                    </td>
+                    <td align="center">
+                        <label for="houseno">House Number:</label>
+                    </td>
+                    <td>
+                        <input type="text" name="houseno" id="houseno" placeholder="Enter House Number">
+                    </td>
+                <tr>
+                    <td align="center">
+                        <label for="roadname">Road Name:</label>
+                    </td>
+                    <td>
+                        <input type="text" name="roadname" id="roadname" placeholder="Enter Road Name">
+                    </td>
+                    <td align="center">
+                        <label for="address">Address:</label>
+                    </td>
+                    <td colspan="3">
+                        <input type="text" name="address" id="address" placeholder="Enter Address">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <input type="submit" value="Submit">
+                        <input type="button" name="btncancel" id="btncancel" value="Cancel" onclick="window.location.href='/searchsite/'">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header, footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Hide number input spin buttons */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <form id="customerForm" method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>
+                    <label for="customer_name">Customer Name:</label>
+                </td>
+                <td colspan="3">
+                    <input type="text" name="customer_name" id="customer_name" placeholder="Enter Customer Name" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="emailids">Email Address:</label>
+                </td>
+                <td colspan="3">
+                    <input type="email" name="emailids" id="emailids" placeholder="Enter Email Address" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="phoneno">Phone Number:</label>
+                </td>
+                <td>
+                    <input type="number" name="phoneno" id="phoneno" placeholder="Enter Phone Number">
+                </td>
+                <td>
+                    <label for="address">Address:</label>
+                </td>
+                <td>
+                    <input type="text" name="address" id="address" placeholder="Enter Address" required>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <input type="submit" value="Submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

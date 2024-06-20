@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Registration Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 4px; /* reduced padding */
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], input[type="date"], input[type="datetime-local"], textarea, select {
+            width: calc(100% - 8px); /* reduced width */
+            padding: 4px; /* reduced padding */
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px; /* reduced padding */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px; /* reduced font size */
+            margin: 2px 1px; /* reduced margin */
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .cancel-button {
+            background-color: #ff4d4d;
+            padding: 8px 16px; /* reduced padding */
+        }
+
+        .cancel-button:hover {
+            background-color: #ff1a1a;
+        }
+
+        /* Remove the up and down arrows from number input */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        h2 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px; /* reduced padding */
+            border-radius: 4px;
+            font-size: 16px; /* reduced font size */
+        }
+
+        /* Center-align label text */
+        label {
+            display: block;
+            text-align: center;
+        }
+
+        /* Center the buttons */
+        .button-container {
+            text-align: center;
+        }
+
+        .button-container button {
+            margin: 0 5px; /* Space between buttons */
+        }
+    </style>
+</head>
+<body>
+    <h1>Employee Registration Management</h1>
+    <form id="employeeForm" method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td colspan="4"><h2>Personal Information :</h2></td>
+            </tr>
+            <tr>
+                <td><label for="employee_name">Employee Name :</label></td>
+                <td><input type="text" id="employee_name" name="employee_name" required></td>
+                <td><label for="employeenum">Employee Number :</label></td>
+                <td><input type="text" id="employeenum" name="employeenum" required></td>
+            </tr>
+            <tr>
+                <td><label for="emailid">Email ID :</label></td>
+                <td><input type="email" id="emailid" name="emailid" required></td>
+                <td><label for="phonenum">Phone Number :</label></td>
+                <td><input type="number" id="phonenum" name="phonenum" required></td>
+            </tr>
+            <tr>
+                <td><label for="dateofbirth">Date of Birth :</label></td>
+                <td><input type="date" id="dateofbirth" name="dateofbirth" required></td>
+                <td><label for="permanentaddress">Permanent Address :</label></td>
+                <td><textarea id="permanentaddress" name="permanentaddress" rows="3" required></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="presentaddress">Present Address :</label></td>
+                <td><textarea id="presentaddress" name="presentaddress" rows="3" required></textarea></td>
+                <td><label for="gender">Gender :</label></td>
+                <td>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="bloodgroup">Blood Group :</label></td>
+                <td>
+                    <select id="bloodgroup" name="bloodgroup" required>
+                        <option value="">Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </td>
+                <td><label for="status">Status :</label></td>
+                <td>
+                    <select id="status" name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="Married">Married</option>
+                        <option value="Unmarried">Unmarried</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4"><h2>Official Information :</h2></td>
+            </tr>
+            <tr>
+                <td><label for="bankacnum">Bank Account Number :</label></td>
+                <td><input type="number" id="bankacnum" name="bankacnum" required></td>
+                <td><label for="qualification">Qualification :</label></td>
+                <td><input type="text" id="qualification" name="qualification" required></td>
+            </tr>
+            <tr>
+                <td><label for="aadharcard">Aadhar Card :</label></td>
+                <td><input type="number" id="aadharcard" name="aadharcard" required></td>
+                <td><label for="pancard">PAN Card :</label></td>
+                <td><input type="text" id="pancard" name="pancard" required></td>
+            </tr>
+            <tr>
+                <td><label for="pfnum">PF Number :</label></td>
+                <td><input type="text" id="pfnum" name="pfnum" required></td>
+                <td><label for="pfeligibledate">PF Eligible Date :</label></td>
+                <td><input type="date" id="pfeligibledate" name="pfeligibledate" required></td>
+            </tr>
+            <tr>
+                <td><label for="licencenum">Licence Number :</label></td>
+                <td><input type="text" id="licencenum" name="licencenum" required></td>
+            </tr>
+            <tr class="button-container">
+            <td colspan="4" class="button-container"><button type="submit">submit</button>
+            <input type="button" name="btncancel" id="btncancel" value="Cancel">
+            </td>
+        </tr>
+        </table>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
