@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ADD MATERIAL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 2px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>ADD MATERIAL</h1>
+
+<table>
+    <tr>
+        <th>CUSTOMERS</th>
+        <th>SITE</th>
+        <th>CURRENTDATE</th>
+        <th>TRANSFERDATE</th>
+        <th>MATERIAL</th>
+        <th>CATEGORY</th>
+        <th>SPECIFICATIONS</th>
+        <th>UNIT</th>
+        <th>QUANTITY</th>
+        <th>REQUIREMENTBY</th>
+        <th>REQUIREMENTTO</th>
+        <th>ACTION</th>
+    </tr>
+    {% for i in addmates %}
+    <tr>
+        <td>{{ i.customers.customer_name }}</td>
+        <td>{{ i.site }}</td>
+        <td>{{ i.currentdate }}</td>
+        <td>{{ i.transferdate }}</td>
+        <td>{{ i.materials.materialname }}</td>
+        <td>{{ i.categorys.categoryname }}</td>
+        <td>{{ i.specifications }}</td>
+        <td>{{ i.units.unitmeasurementname }}</td>
+        <td>{{ i.quantitys }}</td>
+        <td>{{ i.requirementby }}</td>
+        <td>{{ i.requirementto }}</td>
+        <td class="actions">
+            <a href="/updateaddmaterial/{{ i.id }}">Update</a>
+            <a href="/deleteaddmaterial/{{ i.id }}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

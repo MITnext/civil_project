@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ADD MATERIAL</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 4px; /* reduced padding */
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], input[type="date"], input[type="datetime-local"], textarea, select {
+            width: calc(100% - 8px); /* reduced width */
+            padding: 4px; /* reduced padding */
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px; /* reduced padding */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px; /* reduced font size */
+            margin: 2px 1px; /* reduced margin */
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .cancel-button {
+            background-color: #ff4d4d;
+            padding: 8px 16px; /* reduced padding */
+        }
+
+        .cancel-button:hover {
+            background-color: #ff1a1a;
+        }
+
+        /* Remove the up and down arrows from number input */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        h2 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px; /* reduced padding */
+            border-radius: 4px;
+            font-size: 16px; /* reduced font size */
+        }
+
+        /* Center-align label text */
+        label {
+            display: block;
+            text-align: center;
+        }
+
+        /* Center the buttons */
+        .button-container {
+            text-align: center;
+        }
+
+        .button-container button {
+            margin: 0 5px; /* Space between buttons */
+        }
+    </style>
+</head>
+<body>
+<div class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td colspan="4" align="center">
+                    <h2>ADD MATERIAL</h2>
+                </td>
+            </tr>
+            <tr>
+                <th>CUSTOMERS:</th>
+                <td>{{ form.customers }}</td>
+                <th>SITE:</th>
+                <td>{{ form.site }}</td>
+            </tr>
+            <tr>
+                <th>CURRENT DATE:</th>
+                <td>{{ form.currentdate }}</td>
+                <th>TRANSFER DATE:</th>
+                <td>{{ form.transferdate }}</td>
+            </tr>
+            <tr>
+                <th>MATERIAL:</th>
+                <td>{{ form.materials }}</td>
+                <th>CATEGORY:</th>
+                <td>{{ form.categorys }}</td>
+            </tr>
+            <tr>
+                <th>SPECIFICATIONS:</th>
+                <td>{{ form.specifications }}</td>
+                <th>UNIT:</th>
+                <td>{{ form.units }}</td>
+            </tr>
+            <tr>
+                <th>QUANTITY:</th>
+                <td>{{ form.quantitys }}</td>
+                <th>REQUIREMENT BY:</th>
+                <td>{{ form.requirementby }}</td>
+            </tr>
+            <tr>
+                <th>REQUIREMENT TO:</th>
+                <td>{{ form.requirementto }}</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <a type="button" class="btn btn-danger" href="/cancel">Cancel</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
+
