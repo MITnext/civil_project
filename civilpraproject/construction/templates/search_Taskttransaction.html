@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Approved Inquiries</title>
 </head>
 <body>
-$END$
+    <h2>Approved Inquiries</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>customers</th>
+                <th>task</th>
+                <th>assign to</th>
+                <th>assign two</th>
+                <th>assign three</th>
+                <th>start date</th>
+                <th>end date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in task %}
+                <tr>
+                    <td>{{ i.customersid }}</td>
+                    <td>{{ i.task }}</td>
+                    <td>{{ i.assign_to }}</td>
+                    <td>{{ i.assign_two }}</td>
+                    <td>{{ i.assign_three }}</td>
+                    <td>{{ i.start_date }}</td>
+                    <td>{{ i.end_date }}</td>
+                    <td>{{ i.Status }}</td>
+                  <td> <a href="/update_task/{{i.id}}"> update</a>
+                        <a href="/delete_tasktransaction/{{i.id}}"> delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

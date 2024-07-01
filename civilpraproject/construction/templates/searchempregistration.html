@@ -57,12 +57,12 @@
 <table>
     <tr>
         <th>EMPLOYEE_NAME</th>
-        <th>EMPLOYEENUM</th>
+        <th>EMPLOYEEID</th>
         <th>EMAILID</th>
         <th>PHONENUM</th>
         <th>DATEOFBIRTH</th>
         <th>PERMANENTADDRESS</th>
-        <th>PRESENTADDRESS</th>
+        <th>CURRENTADDRESS</th>
         <th>GENDER</th>
         <th>BLOODGROUP</th>
         <th>STATUS</th>
@@ -78,7 +78,7 @@
     {% for i in emplos %}
     <tr>
         <td>{{ i.employee_name }}</td>
-        <td>{{ i.employeenum }}</td>
+        <td>{{ i.employeeid }}</td>
         <td>{{ i.emailid }}</td>
         <td>{{ i.phonenum }}</td>
         <td>{{ i.dateofbirth }}</td>
@@ -95,8 +95,8 @@
         <td>{{ i.pfeligibledate }}</td>
         <td>{{ i.licencenum }}</td>
         <td class="actions">
-            <a href="/updatebrand/{{ i.id }}">Update</a>
-            <a href="/deletebrand/{{ i.id }}">Delete</a>
+            <a href="/updateempregistration/{{ i.id }}">Update</a>
+            <a href="/deleteempregistration/{{ i.id }}">Delete</a>
         </td>
     </tr>
     {% endfor %}

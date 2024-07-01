@@ -9,28 +9,23 @@
             margin: 20px;
             background-color: #f4f4f9;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
-
         table, th, td {
             border: 2px solid #ddd;
             text-align: left;
             padding: 8px;
         }
-
         th {
             background-color: #4CAF50;
             color: white;
         }
-
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-
         button {
             background-color: #4CAF50;
             color: white;
@@ -44,30 +39,24 @@
             cursor: pointer;
             border-radius: 4px;
         }
-
         button:hover {
             background-color: #45a049;
         }
-
         .cross-button {
             background-color: #ff4d4d;
             padding: 5px 10px;
         }
-
         .cross-button:hover {
             background-color: #ff1a1a;
         }
-
         .searchable-select {
             position: relative;
         }
-
         .searchable-select input {
             width: 100%;
             box-sizing: border-box;
             padding: 8px;
         }
-
         .searchable-select ul {
             list-style: none;
             margin: 0;
@@ -81,18 +70,31 @@
             background-color: white;
             z-index: 1;
         }
-
         .searchable-select ul li {
             padding: 8px;
             cursor: pointer;
         }
-
         .searchable-select ul li:hover {
             background-color: #f2f2f2;
         }
     </style>
     <script>
         let materialList = [];
+
+        function fetchSites(customerId) {
+            fetch(`/get-sites/${customerId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const siteSelect = document.getElementById('site');
+                    siteSelect.innerHTML = '<option value="">Select Site</option>';
+                    data.forEach(site => {
+                        const option = document.createElement('option');
+                        option.value = site.id;
+                        option.textContent = site.name;
+                        siteSelect.appendChild(option);
+                    });
+                });
+        }
 
         function addMaterial() {
             const materialSelect = document.getElementById('material');
@@ -196,6 +198,17 @@
             input.dataset.value = id;
             element.parentElement.style.display = 'none';
         }
+
+        function updateRequirementBy() {
+            const customerSelect = document.getElementById('customers');
+            const requirementByInput = document.getElementById('requirementby');
+
+            if (customerSelect.selectedIndex !== 0) {
+                requirementByInput.value = customerSelect.options[customerSelect.selectedIndex].text;
+            } else {
+                requirementByInput.value = '';
+            }
+        }
     </script>
 </head>
 <body>
@@ -203,13 +216,42 @@
     {% csrf_token %}
     <table>
         <tr>
+            <td><label>Customer</label></td>
+            <td>
+                <select id="customers" name="customers" onchange="fetchSites(this.value); updateRequirementBy();">
+                    <option value="">Select Customer</option>
+                    {% for customer in customers %}
+                    <option value="{{ customer.id }}">{{ customer.customer_name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td><label>Site</label></td>
+            <td>
+                <select id="site" name="site">
+                    <option value="">Select Site</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Current Date</label></td>
+            <td><input type="datetime-local" id="currentdate" name="currentdate"></td>
+            <td><label>Transfer Date</label></td>
+            <td><input type="date" id="transferdate" name="transferdate"></td>
+        </tr>
+        <tr>
+            <td><label>Requirement By</label></td>
+            <td><input type="text" id="requirementby" name="requirementby"></td>
+            <td><label>Requirement To</label></td>
+            <td><input type="text" id="requirementto" name="requirementto"></td>
+        </tr>
+        <tr>
             <td><label>Material</label></td>
             <td>
                 <div class="searchable-select">
                     <input type="text" id="material" name="material" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-value="select Name">
                     <ul>
-                        {% for i in materialname %}
-                        <li onclick="selectOption(this, '{{i.materialname}}', '{{i.materialid}}')">{{i.materialname}}</li>
+                        {% for i in material_names %}
+                        <li onclick="selectOption(this, '{{ i.materialname }}', '{{ i.materialid }}')">{{ i.materialname }}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -219,8 +261,8 @@
                 <div class="searchable-select">
                     <input type="text" id="category" name="category" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-value="select Name">
                     <ul>
-                        {% for i in categoryname %}
-                        <li onclick="selectOption(this, '{{i.categoryname}}', '{{i.categoryid}}')">{{i.categoryname}}</li>
+                        {% for i in category_names %}
+                        <li onclick="selectOption(this, '{{ i.categoryname }}', '{{ i.categoryid }}')">{{ i.categoryname }}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -234,8 +276,8 @@
                 <div class="searchable-select">
                     <input type="text" id="unit" name="unit" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-value="select Name">
                     <ul>
-                        {% for i in unitmeasurementname %}
-                        <li onclick="selectOption(this, '{{i.unitmeasurementname}}', '{{i.unitmeasurementid}}')">{{i.unitmeasurementname}}</li>
+                        {% for i in unit_measurement_names %}
+                        <li onclick="selectOption(this, '{{ i.unitmeasurementname }}', '{{ i.unitmeasurementid }}')">{{ i.unitmeasurementname }}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -272,20 +314,3 @@
 </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

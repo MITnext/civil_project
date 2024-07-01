@@ -1,10 +1,6 @@
 from django import forms
 from .models import *
 
-class customersform(forms.ModelForm):
-    class Meta:
-        model = Customer
-        fields = ['customer_name','emailids','phoneno','address']
 
 class siteform(forms.ModelForm):
     class Meta:
@@ -39,11 +35,6 @@ class constructionlevelform(forms.ModelForm):
         fields = ['constructionlevelname','description']
 
 
-class worktypesform(forms.ModelForm):
-    class Meta:
-        model = worktypes
-        fields = ['worktypeid','worktypename','workdescription']
-
 
 class internaltransferform(forms.ModelForm):
     class Meta:
@@ -53,13 +44,31 @@ class internaltransferform(forms.ModelForm):
                   'drivernum','date','material','brand','unit','quantity','transferdate']
 
 
+
+class addmaterialform(forms.ModelForm):
+    class Meta:
+        model = addmaterial
+        fields = "__all__"
+
+
 class employeeregistrationform(forms.ModelForm):
     class Meta:
         model = employeeregistration
-        fields = ['employee_name','employeenum','emailid','phonenum','dateofbirth',
-                 'permanentaddress','presentaddress','gender','bloodgroup','status','bankacnum',
-                 'qualification','aadharcard','pancard','pfnum','pfeligibledate','licencenum']
+        fields = ['employee_name', 'emailid', 'phonenum', 'dateofbirth', 'permanentaddress', 'presentaddress',
+                  'gender', 'bloodgroup', 'status', 'bankacnum', 'qualification', 'aadharcard', 'pancard',
+                  'pfnum', 'pfeligibledate', 'licencenum']
 
+
+
+class approvedinquiryform(forms.ModelForm):
+    class Meta:
+        model = approvedinquiry
+        fields = ['customer_name', 'employee', 'plotarea', 'constructionarea', 'constructioncost', 'totalcost', 'worktype']
+        widgets = {
+            'constructionarea': forms.NumberInput(attrs={'id': 'constructionarea'}),
+            'constructioncost': forms.NumberInput(attrs={'id': 'constructioncost'}),
+            'totalcost': forms.NumberInput(attrs={'id': 'totalcost'}),
+        }
 
 
 class constypeForm(forms.ModelForm):
