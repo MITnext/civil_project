@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Appproved Inquiry</title>
+    <style>
+        table {
+            width: 50%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        tr {
+            height: 50px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            font-size: 20px;
+        }
+        input {
+            border: 1px solid;
+            padding: 12px;
+            font-size: 15px;
+        }
+        button {
+            padding: 10px 50px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td colspan="2" align="center">
+                    <h2>Update Appproved Inquiry</h2>
+                </td>
+            </tr>
+            <tr>
+                <th>Client:</th>
+                <td>{{ form.customer_name }}</td>
+            </tr>
+            <tr>
+                <th>Plot Area:</th>
+                <td>{{ form.plotarea }}</td>
+            </tr>
+            <tr>
+                <th>Construction Area:</th>
+                <td>{{ form.constructionarea }}</td>
+            </tr>
+            <tr>
+                <th>Construction Cost:</th>
+                <td>{{ form.constructioncost }}</td>
+            </tr>
+            <tr>
+                <th>Total Cost:</th>
+                <td>{{ form.totalcost }}</td>
+            </tr>
+            <tr>
+                <th>Employee:</th>
+                <td>{{ form.employee }}</td>
+            </tr>
+            <tr>
+                <th>Work Type:</th>
+                <td>{{ form.worktype }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <a type="button" class="btn btn-danger" href="/search_approvedinquiry">Cancel</a>
+                    <button type="submit" class="btn btn-success">Update</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
