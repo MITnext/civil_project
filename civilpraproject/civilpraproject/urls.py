@@ -26,7 +26,7 @@ def landing_page(request):
     return render(request, 'home_page.html')
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', landing_page, name='home_page'),
+    path('land', landing_page, name='home_page'),
     path('', include('construction.urls')),
 
 ]

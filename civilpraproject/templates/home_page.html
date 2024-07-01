@@ -78,6 +78,7 @@
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
+            <a href="approvedinquiry">approved client</a>
             <a href="createsite">Create Site</a>
             <a href="creatematerial">Create Material</a>
             <a href="createconstructionlevel">Create Construction Level</a>
@@ -94,6 +95,7 @@
         </button>
         <div class="dropdown-content">
             <a href="task_assignmenttran/">Task Assignment</a>
+            <a href="labour_management/">Labour management</a>
             <a href="tasks_search/">Customer Site Task List</a>
             <a href="assignee_tasks/">Assignee Task List</a>
             <a href="createinternaltransfer/">Create Internal Transfer</a>
@@ -146,6 +148,20 @@
             <a href="searchaddmaterial/">Search Add Material</a>
             <a href="searchempregistration">Search Employee Registration</a>
             <a href="search_approvedinquiry/">Search Approved Inquiry</a>
+            <a href="search_masterlabour/">Search master labour</a>
+            <a href="search_labourtransaction/">Search labour transaction</a>
+            <a href="searchconstruction_type/">Search construction type</a>
+            <a href="search_vendor-registration/">Search vendor registration</a>
+            <a href="search_rough_drawing/">Search rough drawing</a>
+            <a href="search_final_drawing/">Search final drawing</a>
+        </div>
+    </div>
+        <div class="dropdown">
+        <button class="dropbtn">Logout
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a>
         </div>
     </div>
 </div>

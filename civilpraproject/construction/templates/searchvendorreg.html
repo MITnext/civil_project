@@ -1,4 +1,8 @@
-<style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title> </title>
+    <style>
    /* Style for the heading and button */
 .m-4 {
     margin: 1.5rem; /* 24px margin */
@@ -69,24 +73,39 @@ a:hover {
 }
 
 </style>
-<h1 class="m-4 text-center">Search Master Data </h1>
-
+</head>
+<body>
+<h1 class="m-4 text-center">Search Vendor <a href="/vendor-registration/" class="btn btn-primary">Add Vendor</a></h1>
 
 <table border="1">
     <tr>
-        <th>customer</th>
-        <th>site</th>
-        <th>created_at</th>
-        <th>update</th>
+        <th>vendor name</th>
+        <th>contact person</th>
+        <th>contact number</th>
+        <th>landline number</th>
+        <th>registered office address</th>
+        <th>email</th>
+        <th>gst no</th>
+        <th>organization type</th>
+        <th>nature of business</th>
     </tr>
-    {%for i in data %}
+    {%for i in records %}
     <tr>
-        <td>{{i.customer}}</td>
-        <td>{{i.site}}</td>
-        <td>{{i.created_at}}</td>
-        <td> <a href="/update_masterdata/{{i.id}}"> update</a>
-            <a href="/delete_masterdata/{{i.id}}"> delete</a></td>
+        <td>{{i.vendor_name}}</td>
+        <td>{{i.contact_person}}</td>
+        <td>{{i.contact_number}}</td>
+        <td>{{i.landline_number}}</td>
+        <td>{{i.registered_office_address}}</td>
+        <td>{{i.email}}</td>
+        <td>{{i.gst_no}}</td>
+        <td>{{i.organization_type}}</td>
+        <td>{{i.nature_of_business}}</td>
+        <td> <a href="/update_vendor-registration/{{i.id}}"> update</a>
+            <a href="/delete_vendor-registration/{{i.id}}"> delete</a></td>
 
     </tr>
     {% endfor %}
 </table>
+
+</body>
+</html>

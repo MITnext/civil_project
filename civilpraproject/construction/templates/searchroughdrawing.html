@@ -1,4 +1,8 @@
-<style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ROUGH DRAWING</title>
+    <style>
    /* Style for the heading and button */
 .m-4 {
     margin: 1.5rem; /* 24px margin */
@@ -69,24 +73,32 @@ a:hover {
 }
 
 </style>
-<h1 class="m-4 text-center">Search Master Data </h1>
-
-
+</head>
+<body>
+<h1 class="m-4 text-center">Search Rough Drawing <a href="/rough_drawing/" class="btn btn-primary">Add Rough Drawing</a></h1>
 <table border="1">
     <tr>
-        <th>customer</th>
-        <th>site</th>
-        <th>created_at</th>
-        <th>update</th>
+        <th>Project Name</th>
+        <th>Client Name</th>
+        <th>Executive Engg Name</th>
+        <th>Date Of Submission</th>
+        <th>Drawing Count</th>
+        <th>Description</th>
     </tr>
-    {%for i in data %}
+    {%for rec in records%}
     <tr>
-        <td>{{i.customer}}</td>
-        <td>{{i.site}}</td>
-        <td>{{i.created_at}}</td>
-        <td> <a href="/update_masterdata/{{i.id}}"> update</a>
-            <a href="/delete_masterdata/{{i.id}}"> delete</a></td>
+        <td>{{rec.project_name}}</td>
+        <td>{{rec.client_name}}</td>
+        <td>{{rec.executive_engg_name}}</td>
+        <td>{{rec.date_of_submission}}</td>
+        <td>{{rec.drawing_count}}</td>
+        <td>{{rec.description}}</td>
+        <td> <a href="/update_rough_drawing/{{rec.id}}"> update</a>
+            <a href="/delete_rough_drawing/{{rec.id}}"> delete</a></td>
 
     </tr>
     {% endfor %}
 </table>
+
+</body>
+</html>

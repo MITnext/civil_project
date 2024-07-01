@@ -3,6 +3,10 @@ from . import views
 
 urlpatterns = [
 
+    path('', views.login_views, name="login"),
+    path('register', views.register_views, name="register"),
+    path('logout', views.logout_views, name="logout"),
+    # path('dashboard', views.dashboard_views, name="dashboard"),
 
     path('createsite', views.createsite),
     path('searchsite', views.searchsite),
@@ -36,10 +40,29 @@ urlpatterns = [
     path('deletebrand/<int:id>', views.deletebrand),
 
     path('construction_type/', views.constypeview),
+    path('searchconstruction_type/', views.search_constypeview),
+    path('updateconstruction_type/<int:id>', views.update_constypeview),
+    path('deleteconstruction_type/<int:id>', views.delete_constypeview),
+
 
     path('vendor-registration/', views.vendor_registration),
+    path('search_vendor-registration/', views.search_vendor_registration),
+    path('update_vendor-registration/<int:id>', views.update_vendor_registration),
+    path('delete_vendor-registration/<int:id>', views.delete_vendor_registration),
+
+
     path('rough_drawing/', views.roughdrawing),
-    path('final_drawing/', views.finaldrawing),
+    path('search_rough_drawing/', views.search_roughdrawing),
+    path('update_rough_drawing/<int:id>', views.update_roughdrawing),
+    path('delete_rough_drawing/<int:id>', views.delete_roughdrawing),
+
+
+    path('final_drawing/', views.Add_finaldrawing),
+    path('search_final_drawing/', views.search_finaldrawing),
+    path('update_final_drawing/<int:id>', views.update_finaldrawing),
+    path('delete_final_drawing/<int:id>', views.delete_finaldrawing),
+
+
 
     path('task_assignmenttran/', views.assign_view),
     path('get_sites/<int:customer_id>/', views.get_sites, name='get_sites'),
@@ -97,5 +120,14 @@ urlpatterns = [
     path('search_approvedinquiry/', views.search_approvedinquiry, name='search_approvedinquiry'),
     path('update_approvedinquiry/<int:id>', views.update_approvedinquiry),
     path('delete_approvedinquiry/<int:id>', views.delete_approvedinquiry),
+
+    path('labour_management/', views.labour_management_view, name='labour_management'),
+    path('get_sites_by_customer/<int:customer_id>/', views.get_sites_by_customer, name='get_sites_by_customer'),
+    path('search_masterlabour/', views.search_masterlabour, name='search_masterlabour'),
+    path('update_masterlabour/<int:id>', views.update_masterlabour, name='update_masterlabour'),
+    path('delete_masterlabour/<int:id>', views.delete_masterlabour,  name='delete_masterlabour'),
+    path('search_labourtransaction/', views.search_labourtransaction, name='search_labourtransaction'),
+    path('update_labourtransaction/<int:id>', views.update_labourtransaction,  name='update_labourtransaction'),
+    path('delete_labourtransaction/<int:id>', views.delete_labourtransaction,  name='delete_labourtransaction'),
 
 ]
