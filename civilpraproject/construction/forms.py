@@ -128,4 +128,14 @@ class WorkProgressForm(forms.ModelForm):
             'progress': forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100'}),
         }
 
+class labourmasterform(forms.ModelForm):
+    class Meta:
+        model = masterlabour
+        fields = "__all__"
+
+
+class labourtransform(forms.ModelForm):
+    class Meta:
+        model = labourtransaction
+        fields = "__all__"
 

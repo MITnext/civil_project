@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ADD MATERIAL</title>
-
-</head>
-<body>
-<style>
+    <title> </title>
+    <style>
    /* Style for the heading and button */
 .m-4 {
     margin: 1.5rem; /* 24px margin */
@@ -76,43 +73,39 @@ a:hover {
 }
 
 </style>
-<h1 class="m-4 text-center">Search ADD MATERIAL <a href="/createaddmaterial/" class="btn btn-primary">ADD MATERIAL</a></h1>
+</head>
+<body>
+<h1 class="m-4 text-center">Search Final Drawing <a href="/final_drawing/" class="btn btn-primary">Add Final Drawing</a></h1>
 
-
-<table>
+<table border="1">
     <tr>
-        <th>CUSTOMERS</th>
-        <th>SITE</th>
-        <th>CURRENTDATE</th>
-        <th>TRANSFERDATE</th>
-        <th>MATERIAL</th>
-        <th>CATEGORY</th>
-        <th>SPECIFICATIONS</th>
-        <th>UNIT</th>
-        <th>QUANTITY</th>
-        <th>REQUIREMENTBY</th>
-        <th>REQUIREMENTTO</th>
-        <th>ACTION</th>
+        <th>Project Name</th>
+        <th>Client Name</th>
+        <th>Executive Engg Name</th>
+        <th>Date Of Submission</th>
+        <th>Drawing Count</th>
+        <th>Description</th>
     </tr>
-    {% for i in addmates %}
+    {%for i in records %}
     <tr>
-        <td>{{ i.customers.customer_name }}</td>
-        <td>{{ i.site }}</td>
-        <td>{{ i.currentdate }}</td>
-        <td>{{ i.transferdate }}</td>
-        <td>{{ i.materials.materialname }}</td>
-        <td>{{ i.categorys.categoryname }}</td>
-        <td>{{ i.specifications }}</td>
-        <td>{{ i.units.unitmeasurementname }}</td>
-        <td>{{ i.quantitys }}</td>
-        <td>{{ i.requirementby }}</td>
-        <td>{{ i.requirementto }}</td>
-        <td class="actions">
-            <a href="/updateaddmaterial/{{ i.id }}">Update</a>
-            <a href="/deleteaddmaterial/{{ i.id }}">Delete</a>
-        </td>
+        <td>{{i.projectname}}</td>
+        <td>{{i.clientname}}</td>
+        <td>{{i.executiveenggname}}</td>
+        <td>{{i.dateofsubmission}}</td>
+        <td>{{i.drawingcount}}</td>
+        <td>{{i.description}}</td>
+        <td> <a href="/update_final_drawing/{{i.id}}">update</a>
+            <a href="/delete_final_drawing/{{i.id}}">delete</a></td>
+
     </tr>
     {% endfor %}
 </table>
 </body>
 </html>
+
+
+
+
+
+
+

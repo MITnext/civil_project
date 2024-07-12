@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BRAND List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 2px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <tr>
+        <th>customer</th>
+        <th>sites</th>
+        <th>current date</th>
+        <th>transfer date</th>
+        <th>requirement by</th>
+        <th>requirement to</th>
+        <th>ACTION</th>
+    </tr>
+    {% for i in labour %}
+    <tr>
+        <td>{{ i.customer }}</td>
+        <td>{{ i.sites }}</td>
+        <td>{{ i.current_date }}</td>
+        <td>{{ i.transfer_date }}</td>
+        <td>{{ i.requirement_to }}</td>
+        <td>{{ i.current_date }}</td>
+        <td>
+            <a href="/update_masterlabour/{{ i.id }}">update</a>
+            <a href="/update_masterlabour/{{ i.id }}">delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

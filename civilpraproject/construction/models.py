@@ -268,3 +268,20 @@ class WorkProgress(models.Model):
     def __str__(self):
         return f"Progress: {self.progress}%"
 
+class masterlabour(models.Model):
+    customer = models.ForeignKey(approvedinquiry, on_delete=models.CASCADE)
+    sites = models.ForeignKey(Site, on_delete=models.CASCADE)
+    current_date = models.DateTimeField(default=datetime.datetime.now)
+    transfer_date = models.DateTimeField()
+    requirement_by = models.CharField(max_length=50)
+    requirement_to = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.customer)
+
+
+class labourtransaction(models.Model):
+    customerid = models.ForeignKey(masterlabour, on_delete=models.CASCADE)
+    constructiontypes = models.ForeignKey(constructiontype, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+

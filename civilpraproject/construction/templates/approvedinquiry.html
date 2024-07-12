@@ -70,12 +70,12 @@
                         <label>Employee:</label>
                     </td>
                     <td>
-                        {{ form.employee }}
+                        <input type="text" id="employee" name="employee" readonly>
                     </td>
                 </tr>
                 <tr>
                     <td align="center">
-                        <label>PLOT AREA:</label>
+                        <label>Plot Area:</label>
                     </td>
                     <td>
                         {{ form.plotarea }}
@@ -83,7 +83,7 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <label>CONSTRUCTION AREA:</label>
+                        <label>Construction Area:</label>
                     </td>
                     <td>
                         {{ form.constructionarea }}
@@ -91,7 +91,7 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <label>CONSTRUCTION COST:</label>
+                        <label>Construction Cost:</label>
                     </td>
                     <td>
                         {{ form.constructioncost }}
@@ -99,10 +99,10 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <label>TOTAL COST:</label>
+                        <label>Total Cost:</label>
                     </td>
                     <td>
-                        {{ form.totalcost }}
+                        <input type="text" id="totalcost" name="totalcost" readonly>
                     </td>
                 </tr>
                 <tr>
@@ -161,11 +161,10 @@
                         'client_id': client_id
                     },
                     success: function(data){
-                        var employee_select = $('#id_employee');
-                        employee_select.empty();
-                        $.each(data.representatives, function(key, value) {
-                            employee_select.append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
+                        if (data.representatives.length > 0) {
+                            var employee = data.representatives[0].name;
+                            $('#employee').val(employee);
+                        }
 
                         // Show client details
                         $('#client_details').show();
