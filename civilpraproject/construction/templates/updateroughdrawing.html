@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Update Brand</title>
+    <title>Update Rough Drawing</title>
     <style>
         table {
             width: 50%;
@@ -40,20 +40,36 @@
         <table border="2">
             <tr>
                 <td colspan="2" align="center">
-                    <h2>Update WORKTYPE</h2>
+                    <h2>Update Rough Drawing</h2>
                 </td>
             </tr>
             <tr>
-                <th>WORKTYPE-Name:</th>
-                <td>{{ form.worktypename }}</td>
+                <th>Project Name:</th>
+                <td>{{ form.project_name }}</td>
             </tr>
             <tr>
-                <th>WORKTYPE DESCRIPTION:</th>
-                <td>{{ form.workdescription }}</td>
+                <th>Client Name:</th>
+                <td>{{ form.client_name }}</td>
+            </tr>
+            <tr>
+                <th>Executive Engg Name:</th>
+                <td>{{ form.executive_engg_name }}</td>
+            </tr>
+            <tr>
+                <th>Date Of Submission:</th>
+                <td>{{ form.date_of_submission }}</td>
+            </tr>
+            <tr>
+                <th>Drawing Count:</th>
+                <td>{{ form.drawing_count }}</td>
+            </tr>
+            <tr>
+                <th>Description:</th>
+                <td>{{ form.description }}</td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <a type="button" class="btn btn-danger" href="/searchworktype">Cancel</a>
+                    <a type="button" class="btn btn-danger" href="/search_rough_drawing">Cancel</a>
                     <button type="submit" class="btn btn-success">Update</button>
                 </td>
             </tr>

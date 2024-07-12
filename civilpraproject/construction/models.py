@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from datetime import timezone
 
 from django.db import models
@@ -8,17 +8,94 @@ from django.core.validators import EmailValidator, RegexValidator
 # Create your models here.
 
 # master tables
-class Customer (models.Model):
-    customer_name = models.CharField(max_length=50)
-    emailids = models.EmailField()
-    phoneno = models.IntegerField(blank=True, null=True)
-    address = models.CharField(max_length=350)
+
+
+class EmployeeIDCounter(models.Model):
+    letter = models.CharField(max_length=1, unique=True)
+    last_number = models.PositiveIntegerField(default=0)
+
+class employeeregistration(models.Model):
+    employee_name = models.CharField(max_length=50)
+    employeeid = models.CharField(max_length=5, unique=True, blank=True)
+    emailid = models.EmailField()
+    phonenum = models.BigIntegerField()
+    dateofbirth = models.DateField()
+    permanentaddress = models.TextField()
+    presentaddress = models.TextField()
+    gender = models.CharField(max_length=15)
+    bloodgroup = models.CharField(max_length=15)
+    status = models.CharField(max_length=15)
+    bankacnum = models.BigIntegerField()
+    qualification = models.CharField(max_length=50)
+    aadharcard = models.BigIntegerField()
+    pancard = models.CharField(max_length=10)
+    pfnum = models.CharField(max_length=22)
+    pfeligibledate = models.DateField()
+    licencenum = models.CharField(max_length=16)
+
+    def save(self, *args, **kwargs):
+        if not self.employeeid:
+            self.employeeid = self.generate_employeeid()
+        super().save(*args, **kwargs)
+
+    def generate_employeeid(self):
+        first_letter = self.employee_name[0].upper()
+
+        with transaction.atomic():
+            counter, created = EmployeeIDCounter.objects.select_for_update().get_or_create(letter=first_letter)
+            counter.last_number += 1
+            counter.save()
+            employeeid = f"{first_letter}{counter.last_number:04d}"
+
+        return employeeid
+
+    def __str__(self):
+        return self.employee_name
+
+class constructiontype(models.Model):
+    con_type = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.con_type
+
+class Client_registration(models.Model):
+    client_name = models.CharField(max_length=100)
+    representative_name = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
+    phone_no = models.IntegerField()
+    email = models.EmailField()
+    site_address = models.TextField()
+    inquiry_date = models.DateField()
+
+    def __str__(self):
+        return self.client_name
+
+
+class ClientInquiry(models.Model):
+    client_name = models.ForeignKey(Client_registration, on_delete=models.CASCADE)
+    representative_name = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
+    address = models.TextField()
+    date = models.DateField()
+    follow_off_date = models.DateField()
+    construction_type = models.ForeignKey(constructiontype, on_delete=models.CASCADE)
+    remark = models.TextField()
+
+
+class approvedinquiry(models.Model):
+    customer_name = models.ForeignKey(Client_registration, on_delete=models.CASCADE)
+    employee = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
+    plotarea = models.IntegerField()
+    constructionarea = models.IntegerField()
+    constructioncost = models.IntegerField()
+    totalcost = models.IntegerField()
+    worktype = models.ForeignKey(constructiontype, on_delete=models.CASCADE)
+
     def __str__(self):
         return str(self.customer_name)
 
 class Site (models.Model):
     site_name = models.CharField(max_length=50)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(approvedinquiry, on_delete=models.CASCADE)
     pincode = models.IntegerField(blank=True, null=True)
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
@@ -64,19 +141,28 @@ class brandlist (models.Model):
     def __str__(self):
         return str(self.brandname)
 
-class constructiontype(models.Model):
-    con_type = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+class addmaterial (models.Model):
+    customers = models.ForeignKey(approvedinquiry, on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    currentdate = models.DateTimeField(default=datetime.datetime.now)
+    transferdate = models.DateField()
+    materials = models.ForeignKey(mastermateriallist, on_delete=models.CASCADE)
+    categorys = models.ForeignKey(Category, on_delete=models.CASCADE)
+    specifications = models.TextField()
+    units = models.ForeignKey(unitmeasurement, on_delete=models.CASCADE)
+    quantitys = models.IntegerField(blank=True, null=True)
+    requirementby = models.CharField(max_length = 200)
+    requirementto = models.CharField(max_length = 200)
 
-    def __str__(self):
-        return self.con_type
 
-class worktypes(models.Model):
-    worktypeid = models.AutoField(primary_key=True)
-    worktypename = models.CharField(max_length=40)
-    workdescription = models.CharField(max_length=250)
-    def __str__(self):
-        return str(self.worktypename)
+
+
+
+
+# ********************************************************************************************************
+
+
+
 
 
 # main form
@@ -99,91 +185,7 @@ class internaltransfer (models.Model):
     quantity = models.IntegerField(blank=True, null=True)
     transferdate = models.DateTimeField()
 
-class addmaterial (models.Model):
-    customers = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
-    currentdate = models.DateTimeField(default=datetime.datetime.now)
-    transferdate = models.DateField()
-    materials = models.ForeignKey(mastermateriallist, on_delete=models.CASCADE)
-    categorys = models.ForeignKey(Category, on_delete=models.CASCADE)
-    specifications = models.TextField()
-    units = models.ForeignKey(unitmeasurement, on_delete=models.CASCADE)
-    quantitys = models.IntegerField(blank=True, null=True)
-    requirementby = models.CharField(max_length = 200)
-    requirementto = models.CharField(max_length = 200)
 
-
-#***************************************************************************************************************************
-
-
-from django.db import models
-from django.db import transaction
-
-class EmployeeIDCounter(models.Model):
-    letter = models.CharField(max_length=1, unique=True)
-    last_number = models.PositiveIntegerField(default=0)
-
-class employeeregistration(models.Model):
-    employee_name = models.CharField(max_length=50)
-    employeeid = models.CharField(max_length=5, unique=True, blank=True)
-    emailid = models.EmailField()
-    phonenum = models.BigIntegerField()
-    dateofbirth = models.DateField()
-    permanentaddress = models.TextField()
-    presentaddress = models.TextField()
-    gender = models.CharField(max_length=15)
-    bloodgroup = models.CharField(max_length=15)
-    status = models.CharField(max_length=15)
-    bankacnum = models.BigIntegerField()
-    qualification = models.CharField(max_length=50)
-    aadharcard = models.BigIntegerField()
-    pancard = models.CharField(max_length=10)
-    pfnum = models.CharField(max_length=22)
-    pfeligibledate = models.DateField()
-    licencenum = models.CharField(max_length=16)
-
-    def save(self, *args, **kwargs):
-        if not self.employeeid:
-            self.employeeid = self.generate_employeeid()
-        super().save(*args, **kwargs)
-
-    def generate_employeeid(self):
-        first_letter = self.employee_name[0].upper()
-
-        with transaction.atomic():
-            counter, created = EmployeeIDCounter.objects.select_for_update().get_or_create(letter=first_letter)
-            counter.last_number += 1
-            counter.save()
-            employeeid = f"{first_letter}{counter.last_number:04d}"
-
-        return employeeid
-
-    def __str__(self):
-        return self.employee_name
-
-
-#****************************************************************************************************************
-
-class Client_registration(models.Model):
-    client_name = models.CharField(max_length=100)
-    representative_name = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
-    phone_no = models.IntegerField()
-    email = models.EmailField()
-    site_address = models.TextField()
-    inquiry_date = models.DateField()
-
-    def __str__(self):
-        return self.client_name
-
-
-class ClientInquiry(models.Model):
-    client_name = models.ForeignKey(Client_registration, on_delete=models.CASCADE)
-    representative_name = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
-    address = models.TextField()
-    date = models.DateField()
-    follow_off_date = models.DateField()
-    construction_type = models.ForeignKey(constructiontype, on_delete=models.CASCADE)
-    remark = models.TextField()
 
 
 
@@ -230,7 +232,7 @@ class finaldrawing(models.Model):
 
 
 class masterdata(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(approvedinquiry, on_delete=models.CASCADE)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=datetime.datetime.now)
     def __str__(self):
@@ -241,6 +243,12 @@ class masterdata(models.Model):
 
 
 class Taskttransaction(models.Model):
+    progresstatus = (
+        ('To Do', 'To Do'),
+        ('In Progress', 'In Progress'),
+        ('Done', 'Done'),
+
+    )
     customersid = models.ForeignKey(masterdata, on_delete=models.CASCADE)
     task = models.ForeignKey(constructionlevel, on_delete=models.CASCADE)
     assign_to = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
@@ -248,7 +256,7 @@ class Taskttransaction(models.Model):
     assign_three = models.ForeignKey(employeeregistration, on_delete=models.CASCADE, related_name='assigned_three',blank=True,null=True)
     start_date = models.DateField()
     end_date = models.DateField()
-    state = models.CharField(max_length=50, default='assign')
+    Status = models.CharField(max_length=50, choices=progresstatus, default='assign')
 
 
 class WorkProgress(models.Model):
@@ -260,15 +268,20 @@ class WorkProgress(models.Model):
     def __str__(self):
         return f"Progress: {self.progress}%"
 
+class masterlabour(models.Model):
+    customer = models.ForeignKey(approvedinquiry, on_delete=models.CASCADE)
+    sites = models.ForeignKey(Site, on_delete=models.CASCADE)
+    current_date = models.DateTimeField(default=datetime.datetime.now)
+    transfer_date = models.DateTimeField()
+    requirement_by = models.CharField(max_length=50)
+    requirement_to = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.customer)
 
 
-
-class approvedinquiry(models.Model):
-    client = models.ForeignKey(Client_registration, on_delete=models.CASCADE)
-    employee = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
-    plotarea = models.IntegerField()
-    constructionarea = models.IntegerField()
-    constructioncost = models.IntegerField()
-    totalcost = models.IntegerField()
-    worktype = models.ForeignKey(worktypes, on_delete=models.CASCADE)
+class labourtransaction(models.Model):
+    customerid = models.ForeignKey(masterlabour, on_delete=models.CASCADE)
+    constructiontypes = models.ForeignKey(constructiontype, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
 

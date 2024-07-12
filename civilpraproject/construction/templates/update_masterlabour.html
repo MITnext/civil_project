@@ -1,0 +1,46 @@
+
+{% block content %}
+<div class="card-body">
+    <form method="post">
+        {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td colspan="2" align="center">
+                    <h3>Update Customer</h3>
+                </td>
+            </tr>
+            <tr>
+                <th>customer:</th>
+                <td>{{ form.customer }}</td>
+            </tr>
+            <tr>
+                <th>sites:</th>
+                <td>{{ form.sites }}</td>
+            </tr>
+            <tr>
+                <th>current date:</th>
+                <td>{{ form.current_date }}</td>
+            </tr>
+            <tr>
+                <th>transfer date:</th>
+                <td>{{ form.transfer_date }}</td>
+            </tr>
+            <tr>
+                <th>requirement by:</th>
+                <td>{{ form.requirement_by }}</td>
+            </tr>
+            <tr>
+                <th>requirement to:</th>
+                <td>{{ form.requirement_to }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                     <a type="button" class="btn btn-danger" href="/search_masterlabour">Cancel</a>
+                    <button type="submit" class="btn btn-success">Update</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

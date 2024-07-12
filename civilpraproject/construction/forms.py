@@ -1,10 +1,6 @@
 from django import forms
 from .models import *
 
-class customersform(forms.ModelForm):
-    class Meta:
-        model = Customer
-        fields = ['customer_name','emailids','phoneno','address']
 
 class siteform(forms.ModelForm):
     class Meta:
@@ -39,15 +35,6 @@ class constructionlevelform(forms.ModelForm):
         fields = ['constructionlevelname','description']
 
 
-class worktypesform(forms.ModelForm):
-    class Meta:
-        model = worktypes
-        fields = ['worktypeid','worktypename','workdescription']
-
-class addmaterialform(forms.ModelForm):
-    class Meta:
-        model = addmaterial
-        fields = "__all__"
 
 class internaltransferform(forms.ModelForm):
     class Meta:
@@ -58,6 +45,12 @@ class internaltransferform(forms.ModelForm):
 
 
 
+class addmaterialform(forms.ModelForm):
+    class Meta:
+        model = addmaterial
+        fields = "__all__"
+
+
 class employeeregistrationform(forms.ModelForm):
     class Meta:
         model = employeeregistration
@@ -65,6 +58,17 @@ class employeeregistrationform(forms.ModelForm):
                   'gender', 'bloodgroup', 'status', 'bankacnum', 'qualification', 'aadharcard', 'pancard',
                   'pfnum', 'pfeligibledate', 'licencenum']
 
+
+
+class approvedinquiryform(forms.ModelForm):
+    class Meta:
+        model = approvedinquiry
+        fields = ['customer_name', 'employee', 'plotarea', 'constructionarea', 'constructioncost', 'totalcost', 'worktype']
+        widgets = {
+            'constructionarea': forms.NumberInput(attrs={'id': 'constructionarea'}),
+            'constructioncost': forms.NumberInput(attrs={'id': 'constructioncost'}),
+            'totalcost': forms.NumberInput(attrs={'id': 'totalcost'}),
+        }
 
 
 class constypeForm(forms.ModelForm):
@@ -124,16 +128,14 @@ class WorkProgressForm(forms.ModelForm):
             'progress': forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100'}),
         }
 
-
-
-class approvedinquiryform(forms.ModelForm):
+class labourmasterform(forms.ModelForm):
     class Meta:
-        model = approvedinquiry
-        fields = ['client', 'employee', 'plotarea', 'constructionarea', 'constructioncost', 'totalcost', 'worktype']
-        widgets = {
-            'constructionarea': forms.NumberInput(attrs={'id': 'constructionarea'}),
-            'constructioncost': forms.NumberInput(attrs={'id': 'constructioncost'}),
-            'totalcost': forms.NumberInput(attrs={'id': 'totalcost'}),
-        }
+        model = masterlabour
+        fields = "__all__"
 
+
+class labourtransform(forms.ModelForm):
+    class Meta:
+        model = labourtransaction
+        fields = "__all__"
 

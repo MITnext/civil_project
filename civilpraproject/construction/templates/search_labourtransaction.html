@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WORK TYPE </title>
+    <title>BRAND List</title>
     <style>
         table {
             border-collapse: collapse;
@@ -18,17 +18,19 @@
 
 <table>
     <tr>
-        <th>WORK TYPE NAME</th>
-        <th>DESCRIPTION</th>
+        <th>customerid</th>
+        <th>constructiontypes</th>
+        <th>quantity</th>
         <th>ACTION</th>
     </tr>
-    {% for i in works %}
+    {% for i in labour %}
     <tr>
-        <td>{{ i.worktypename }}</td>
-        <td>{{ i.workdescription }}</td>
+        <td>{{ i.customerid }}</td>
+        <td>{{ i.constructiontypes }}</td>
+        <td>{{ i.quantity }}</td>
         <td>
-            <a href="/updateworktype/{{ i.worktypeid }}">update</a>
-            <a href="/deleteworktype/{{ i.worktypeid }}">delete</a>
+            <a href="/update_labourtransaction/{{ i.id }}">update</a>
+            <a href="/delete_labourtransaction/{{ i.id }}">delete</a>
         </td>
     </tr>
     {% endfor %}

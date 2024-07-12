@@ -1,48 +1,67 @@
-
-  <style>
-        table{
-        width: 50%;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Final Drawing</title>
+    <style>
+        table {
+            width: 50%;
+            margin: 0 auto;
+            border-collapse: collapse;
         }
-        tr{
-        height: 50px;
+        tr {
+            height: 50px;
         }
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 100px;
-            margin-left: 400px;
             font-size: 20px;
         }
-
         input {
             border: 1px solid;
             padding: 12px;
             font-size: 15px;
         }
-
         button {
             padding: 10px 50px;
             font-size: 16px;
             cursor: pointer;
         }
-
         p {
             font-size: 18px;
             margin-top: 20px;
         }
     </style>
+</head>
+<body>
 <div class="card-body">
     <form method="POST">
         {% csrf_token %}
         <table border="2">
             <tr>
                 <td colspan="2" align="center">
-                    <h2>Update Construction LEVEL</h2>
+                    <h2>Update Final Drawing</h2>
                 </td>
             </tr>
             <tr>
-                <th>Construction LEVEL:</th>
-                <td>{{ form.constructionlevelname }}</td>
+                <th>Project Name:</th>
+                <td>{{ form.projectname }}</td>
+            </tr>
+            <tr>
+                <th>Client Name:</th>
+                <td>{{ form.clientname }}</td>
+            </tr>
+            <tr>
+                <th>Executive Engg Name:</th>
+                <td>{{ form.executiveenggname }}</td>
+            </tr>
+            <tr>
+                <th>Date Of Submission:</th>
+                <td>{{ form.dateofsubmission }}</td>
+            </tr>
+            <tr>
+                <th>Drawing Count:</th>
+                <td>{{ form.drawingcount }}</td>
             </tr>
             <tr>
                 <th>Description:</th>
@@ -50,14 +69,12 @@
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                     <a type="button" class="btn btn-danger" href="/searchconstructionlevel">Cancel</a>
+                    <a type="button" class="btn btn-danger" href="/search_final_drawing">Cancel</a>
                     <button type="submit" class="btn btn-success">Update</button>
                 </td>
             </tr>
         </table>
     </form>
 </div>
-
-
-
-
+</body>
+</html>

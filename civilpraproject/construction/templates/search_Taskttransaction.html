@@ -76,32 +76,35 @@ a:hover {
 </style>
 
 <body>
-<h1 class="m-4 text-center">Search Approved Enquiries <a href="/approvedinquiry/" class="btn btn-primary">Add Approved Enquiry</a></h1>
- <table border="1">
+<h1 class="m-4 text-center">Search Approved Enquiries <a href="/task_assignmenttran/" class="btn btn-primary">Add Approved Enquiries</a></h1>
+
+    <table border="1">
         <thead>
             <tr>
-                <th>Client</th>
-                <th>Employee</th>
-                <th>Plot Area</th>
-                <th>Construction Area</th>
-                <th>Construction Cost</th>
-                <th>Total Cost</th>
-                <th>Work Type</th>
+                <th>customers</th>
+                <th>task</th>
+                <th>assign to</th>
+                <th>assign two</th>
+                <th>assign three</th>
+                <th>start date</th>
+                <th>end date</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for i in inquiries %}
+            {% for i in task %}
                 <tr>
-                    <td>{{ i.customer_name }}</td>
-                    <td>{{ i.employee }}</td>
-                    <td>{{ i.plotarea }}</td>
-                    <td>{{ i.constructionarea }}</td>
-                    <td>{{ i.constructioncost }}</td>
-                    <td>{{ i.totalcost }}</td>
-                    <td>{{ i.worktype }}</td>
-                  <td> <a href="/update_approvedinquiry/{{i.id}}"> update</a>
-            <a href="/delete_approvedinquiry/{{i.id}}"> delete</a></td>
+                    <td>{{ i.customersid }}</td>
+                    <td>{{ i.task }}</td>
+                    <td>{{ i.assign_to }}</td>
+                    <td>{{ i.assign_two }}</td>
+                    <td>{{ i.assign_three }}</td>
+                    <td>{{ i.start_date }}</td>
+                    <td>{{ i.end_date }}</td>
+                    <td>{{ i.Status }}</td>
+                  <td> <a href="/update_task/{{i.id}}"> update</a>
+                        <a href="/delete_tasktransaction/{{i.id}}"> delete</a></td>
                 </tr>
             {% endfor %}
         </tbody>

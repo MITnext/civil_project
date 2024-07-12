@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .searchable-select {
+            position: relative;
+        }
+        .searchable-select input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+        .searchable-select ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            display: none;
+            background-color: white;
+            z-index: 1;
+        }
+        .searchable-select ul li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .searchable-select ul li:hover {
+            background-color: #f2f2f2;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <form id="taskForm" method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td><label>Task</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="task" name="task" value="{{ task.task }}" readonly>
+                    </div>
+                </td>
+                <td><label>Assign To</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="assign_to" name="assign_to_name" value="{{ task.assign_to.employee_name }}" readonly>
+                        <input type="hidden" name="assign_to_id" id="assign_to_id" value="{{ task.assign_to.id }}" readonly>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Assign Two</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="assign_two" name="assign_two_name" value="{% if task.assign_two %}{{ task.assign_two.employee_name }}{% endif %}" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)">
+                        <input type="hidden" name="assign_two_id" id="assign_two_id" value="{% if task.assign_two %}{{ task.assign_two.id }}{% endif %}">
+                        <ul id="assign_two_dropdown">
+                            {% for employee in employees %}
+                            <li onclick="selectOption(this, 'assign_two', '{{ employee.employee_name }}', '{{ employee.id }}')">{{ employee.employee_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td><label>Assign Three</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="assign_three" name="assign_three_name" value="{% if task.assign_three %}{{ task.assign_three.employee_name }}{% endif %}" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)">
+                        <input type="hidden" name="assign_three_id" id="assign_three_id" value="{% if task.assign_three %}{{ task.assign_three.id }}{% endif %}">
+                        <ul id="assign_three_dropdown">
+                            {% for employee in employees %}
+                            <li onclick="selectOption(this, 'assign_three', '{{ employee.employee_name }}', '{{ employee.id }}')">{{ employee.employee_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Start Date</label></td>
+                <td><input type="date" id="start_date" name="start_date" value="{{ task.start_date|date:'Y-m-d' }}"></td>
+                <td><label>End Date</label></td>
+                <td><input type="date" id="end_date" name="end_date" value="{{ task.end_date|date:'Y-m-d' }}"></td>
+            </tr>
+            <tr>
+                <td><label>Status Upto</label></td>
+                <td colspan="3">{{ status_upto }}%</td>
+            </tr>
+            <tr>
+                <td><label>Progress Status</label></td>
+                <td>
+                    <select id="Status" name="Status" >
+                        <option value="" selected disabled>{{ task.Status }}</option>
+                        <option value="To Do">To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Done">Done</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <button type="submit">Update</button>
+                </td>
+            </tr>
+            {% if error_message %}
+            <tr>
+                <td colspan="4" class="error-message">{{ error_message }}</td>
+            </tr>
+            {% endif %}
+        </table>
+    </form>
+    <script>
+        function filterOptions(input) {
+            const filter = input.value.toLowerCase();
+            const ul = input.nextElementSibling.nextElementSibling;
+            const li = ul.getElementsByTagName('li');
+            for (let i = 0; i < li.length; i++) {
+                const textValue = li[i].textContent || li[i].innerText;
+                if (textValue.toLowerCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        function toggleDropdown(input) {
+            const ul = input.nextElementSibling.nextElementSibling;
+            ul.style.display = ul.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function selectOption(li, field, name, id) {
+            const input = document.getElementById(field);
+            const hiddenInput = document.getElementById(field + '_id');
+            input.value = name;
+            hiddenInput.value = id;
+            li.parentElement.style.display = 'none';
+        }
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = event.target.closest('.searchable-select');
+            if (!isClickInside) {
+                const dropdowns = document.querySelectorAll('.searchable-select ul');
+                dropdowns.forEach(dropdown => dropdown.style.display = 'none');
+            }
+        });
+    </script>
+</body>
+</html>

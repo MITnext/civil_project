@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Update Appproved Inquiry</title>
+    <title>Update Vendor Registration</title>
     <style>
         table {
             width: 50%;
@@ -40,40 +40,48 @@
         <table border="2">
             <tr>
                 <td colspan="2" align="center">
-                    <h2>Update Appproved Inquiry</h2>
+                    <h2>Update Vendor Registration</h2>
                 </td>
             </tr>
             <tr>
-                <th>Client:</th>
-                <td>{{ form.customer_name }}</td>
+                <th>Vendor Name:</th>
+                <td>{{ form.vendor_name }}</td>
             </tr>
             <tr>
-                <th>Plot Area:</th>
-                <td>{{ form.plotarea }}</td>
+                <th>Contact Person:</th>
+                <td>{{ form.contact_person }}</td>
             </tr>
             <tr>
-                <th>Construction Area:</th>
-                <td>{{ form.constructionarea }}</td>
+                <th>Contact Number:</th>
+                <td>{{ form.contact_number }}</td>
             </tr>
             <tr>
-                <th>Construction Cost:</th>
-                <td>{{ form.constructioncost }}</td>
+                <th>Landline Number:</th>
+                <td>{{ form.landline_number }}</td>
             </tr>
             <tr>
-                <th>Total Cost:</th>
-                <td>{{ form.totalcost }}</td>
+                <th>Registered Office Address:</th>
+                <td>{{ form.registered_office_address }}</td>
             </tr>
             <tr>
-                <th>Employee:</th>
-                <td>{{ form.employee }}</td>
+                <th>Email:</th>
+                <td>{{ form.email }}</td>
             </tr>
             <tr>
-                <th>Work Type:</th>
-                <td>{{ form.worktype }}</td>
+                <th>Gst No:</th>
+                <td>{{ form.gst_no }}</td>
+            </tr>
+            <tr>
+                <th>Organization Type:</th>
+                <td>{{ form.organization_type }}</td>
+            </tr>
+            <tr>
+                <th>Nature Of Business:</th>
+                <td>{{ form.nature_of_business }}</td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <a type="button" class="btn btn-danger" href="/search_approvedinquiry">Cancel</a>
+                    <a type="button" class="btn btn-danger" href="/search_vendor-registration">Cancel</a>
                     <button type="submit" class="btn btn-success">Update</button>
                 </td>
             </tr>

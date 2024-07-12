@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Labour Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .cross-button {
+            background-color: #ff4d4d;
+            padding: 5px 10px;
+        }
+        .cross-button:hover {
+            background-color: #ff1a1a;
+        }
+        .searchable-select {
+            position: relative;
+        }
+        .searchable-select input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+        .searchable-select ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            display: none;
+            background-color: white;
+            z-index: 1;
+        }
+        .searchable-select ul li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .searchable-select ul li:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <form id="labourForm" method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td><label>Customer</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="customer" name="customer_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul id="customer-list">
+                            {% for customer in customer_name %}
+                            <li onclick="selectCustomer('{{ customer.id }}', '{{ customer.customer_name }}')">{{ customer.customer_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td><label>Site</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="site" name="site_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul id="site-list">
+                            <!-- Site options will be dynamically populated here -->
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Transfer Date</label></td>
+                <td><input type="date" id="transfer_date" name="transfer_date"></td>
+                <td><label>Requirement By</label></td>
+                <td><input type="text" id="requirement_by" name="requirement_by"></td>
+            </tr>
+            <tr>
+                <td><label>Requirement To</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="requirement_to_input" name="requirement_to_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul id="requirement-to-list">
+                            {% for employee in employees %}
+                            <li onclick="selectEmployee('{{ employee.id }}', '{{ employee.employee_name }}')">{{ employee.employee_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label>Construction Type</label></td>
+                <td>
+                    <div class="searchable-select">
+                        <input type="text" id="construction_type" name="construction_type_name" placeholder="Search..." onkeyup="filterOptions(this)" onclick="toggleDropdown(this)" data-id="">
+                        <ul id="construction-type-list">
+                            {% for construction_type in construction_types %}
+                            <li onclick="selectConstructionType('{{ construction_type.id }}', '{{ construction_type.con_type }}')">{{ construction_type.con_type }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td><label>Quantity</label></td>
+                <td><input type="number" id="quantity" name="quantity"></td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <button type="button" onclick="addConstruction()">Add</button>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <h3>Construction Type Quantity Action</h3>
+            <table id="constructionTable">
+                <thead>
+                    <tr>
+                        <th>Construction Type</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+        <button type="submit">Save</button>
+        <input type="hidden" id="constructionData" name="constructionData" value="[]">
+        <input type="hidden" id="customer_id" name="customer_id">
+        <input type="hidden" id="site_id" name="site_id">
+        <input type="hidden" id="requirement_to_id" name="requirement_to_id">
+    </form>
+    <script>
+        const constructionArray = [];
+
+        function selectCustomer(customerId, customerName) {
+            document.getElementById('customer').value = customerName;
+            document.getElementById('customer_id').value = customerId;
+            document.getElementById('customer-list').style.display = 'none';
+            fetchSitesByCustomer(customerId);
+        }
+
+        function fetchSitesByCustomer(customerId) {
+            fetch(`/get_sites_by_customer/${customerId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const siteList = document.getElementById('site-list');
+                    siteList.innerHTML = '';
+                    data.forEach(site => {
+                        const li = document.createElement('li');
+                        li.textContent = site.name;
+                        li.onclick = () => selectSite(site.id, site.name);
+                        siteList.appendChild(li);
+                    });
+                });
+        }
+
+        function selectSite(siteId, siteName) {
+            document.getElementById('site').value = siteName;
+            document.getElementById('site_id').value = siteId;
+            document.getElementById('site-list').style.display = 'none';
+        }
+
+        function selectConstructionType(constructionTypeId, constructionTypeName) {
+            document.getElementById('construction_type').value = constructionTypeName;
+            document.getElementById('construction_type').setAttribute('data-id', constructionTypeId);
+            document.getElementById('construction-type-list').style.display = 'none';
+        }
+
+        function selectEmployee(employeeId, employeeName) {
+            document.getElementById('requirement_to_input').value = employeeName;
+            document.getElementById('requirement_to_id').value = employeeId;
+            document.getElementById('requirement-to-list').style.display = 'none';
+        }
+
+        function toggleDropdown(input) {
+            const dropdown = input.nextElementSibling;
+            dropdown.style.display = dropdown.style.display === 'none' || dropdown.style.display === '' ? 'block' : 'none';
+        }
+
+        function filterOptions(input) {
+            const filter = input.value.toLowerCase();
+            const ul = input.nextElementSibling;
+            const li = ul.getElementsByTagName('li');
+            for (let i = 0; i < li.length; i++) {
+                const txtValue = li[i].textContent || li[i].innerText;
+                li[i].style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
+            }
+        }
+
+        function addConstruction() {
+            const constructionTypeInput = document.getElementById('construction_type');
+            const constructionTypeName = constructionTypeInput.value;
+            const constructionTypeId = constructionTypeInput.getAttribute('data-id');
+            const quantity = document.getElementById('quantity').value;
+
+            if (constructionTypeName && quantity) {
+                // Check if the construction type already exists in the array
+                const exists = constructionArray.some(item => item.constructionTypeId === constructionTypeId);
+
+                if (exists) {
+                    alert('Construction type already exists');
+                } else {
+                    constructionArray.push({ constructionTypeId, constructionTypeName, quantity });
+                    updateConstructionTable();
+                    clearConstructionInputs();
+                }
+            }
+        }
+
+        function clearConstructionInputs() {
+            document.getElementById('construction_type').value = '';
+            document.getElementById('construction_type').setAttribute('data-id', '');
+            document.getElementById('quantity').value = '';
+        }
+
+        function updateConstructionTable() {
+            const tbody = document.getElementById('constructionTable').querySelector('tbody');
+            tbody.innerHTML = '';
+            constructionArray.forEach((item, index) => {
+                const row = `<tr>
+                    <td>${item.constructionTypeName}</td>
+                    <td>${item.quantity}</td>
+                    <td><button type="button" class="cross-button" onclick="removeConstruction(${index})">Remove</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+            document.getElementById('constructionData').value = JSON.stringify(constructionArray);
+        }
+
+        function removeConstruction(index) {
+            constructionArray.splice(index, 1);
+            updateConstructionTable();
+        }
+    </script>
+</body>
+</html>
