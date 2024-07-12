@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EMPLOYEE LIST</title>
+    <title>ADD MATERIAL</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,56 +52,43 @@
 </head>
 <body>
 
-<h1>Employee List</h1>
+<h1>ADD MATERIAL</h1>
 
 <table>
     <tr>
-        <th>EMPLOYEE_NAME</th>
-        <th>EMPLOYEEID</th>
-        <th>EMAILID</th>
-        <th>PHONENUM</th>
-        <th>DATEOFBIRTH</th>
-        <th>PERMANENTADDRESS</th>
-        <th>CURRENTADDRESS</th>
-        <th>GENDER</th>
-        <th>BLOODGROUP</th>
-        <th>STATUS</th>
-        <th>BANKACNUM</th>
-        <th>QUALIFICATION</th>
-        <th>AADHARCARD</th>
-        <th>PANCARD</th>
-        <th>PFNUM</th>
-        <th>PFELIGIBLEDATE</th>
-        <th>LICENCENUM</th>
+        <th>CUSTOMERS</th>
+        <th>SITE</th>
+        <th>CURRENTDATE</th>
+        <th>TRANSFERDATE</th>
+        <th>MATERIAL</th>
+        <th>CATEGORY</th>
+        <th>SPECIFICATIONS</th>
+        <th>UNIT</th>
+        <th>QUANTITY</th>
+        <th>REQUIREMENTBY</th>
+        <th>REQUIREMENTTO</th>
         <th>ACTION</th>
     </tr>
-    {% for i in emplos %}
+    {% for i in addmates %}
     <tr>
-        <td>{{ i.employee_name }}</td>
-        <td>{{ i.employeeid }}</td>
-        <td>{{ i.emailid }}</td>
-        <td>{{ i.phonenum }}</td>
-        <td>{{ i.dateofbirth }}</td>
-        <td>{{ i.permanentaddress }}</td>
-        <td>{{ i.presentaddress }}</td>
-        <td>{{ i.gender }}</td>
-        <td>{{ i.bloodgroup }}</td>
-        <td>{{ i.status }}</td>
-        <td>{{ i.bankacnum }}</td>
-        <td>{{ i.qualification }}</td>
-        <td>{{ i.aadharcard }}</td>
-        <td>{{ i.pancard }}</td>
-        <td>{{ i.pfnum }}</td>
-        <td>{{ i.pfeligibledate }}</td>
-        <td>{{ i.licencenum }}</td>
+        <td>{{ i.customers }}</td>
+        <td>{{ i.site }}</td>
+        <td>{{ i.currentdate }}</td>
+        <td>{{ i.transferdate }}</td>
+        <td>{{ i.materials }}</td>
+        <td>{{ i.categorys }}</td>
+        <td>{{ i.specifications }}</td>
+        <td>{{ i.units }}</td>
+        <td>{{ i.quantitys }}</td>
+        <td>{{ i.requirementby }}</td>
+        <td>{{ i.requirementto }}</td>
         <td class="actions">
-            <a href="/updateempregistration/{{ i.id }}">Update</a>
-            <a href="/deleteempregistration/{{ i.id }}">Delete</a>
+            <a href="/updateaddmaterial/{{ i.id }}">Update</a>
+            <a href="/deleteaddmaterial/{{ i.id }}">Delete</a>
         </td>
     </tr>
     {% endfor %}
 </table>
-
 </body>
 </html>
 

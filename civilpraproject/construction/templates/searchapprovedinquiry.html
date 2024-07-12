@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Approved Inquiries</title>
+</head>
+<body>
+    <h2>Approved Inquiries</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Employee</th>
+                <th>Plot Area</th>
+                <th>Construction Area</th>
+                <th>Construction Cost</th>
+                <th>Total Cost</th>
+                <th>Work Type</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in inquiries %}
+                <tr>
+                    <td>{{ i.client }}</td>
+                    <td>{{ i.employee }}</td>
+                    <td>{{ i.plotarea }}</td>
+                    <td>{{ i.constructionarea }}</td>
+                    <td>{{ i.constructioncost }}</td>
+                    <td>{{ i.totalcost }}</td>
+                    <td>{{ i.worktype }}</td>
+                  <td> <a href="/update_approvedinquiry/{{i.id}}"> update</a>
+            <a href="/delete_approvedinquiry/{{i.id}}"> delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

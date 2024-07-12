@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Registration</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 2px solid #ddd;
+            text-align: left;
+            padding: 4px; /* reduced padding */
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], input[type="date"], input[type="datetime-local"], textarea, select {
+            width: calc(100% - 8px); /* reduced width */
+            padding: 4px; /* reduced padding */
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px; /* reduced padding */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px; /* reduced font size */
+            margin: 2px 1px; /* reduced margin */
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .cancel-button {
+            background-color: #ff4d4d;
+            padding: 8px 16px; /* reduced padding */
+        }
+
+        .cancel-button:hover {
+            background-color: #ff1a1a;
+        }
+
+        /* Remove the up and down arrows from number input */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        h2 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px; /* reduced padding */
+            border-radius: 4px;
+            font-size: 16px; /* reduced font size */
+        }
+
+        /* Center-align label text */
+        label {
+            display: block;
+            text-align: center;
+        }
+
+        /* Center the buttons */
+        .button-container {
+            text-align: center;
+        }
+
+        .button-container button {
+            margin: 0 5px; /* Space between buttons */
+        }
+    </style>
+</head>
+<body>
+<div class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td colspan="4" align="center">
+                    <h2>Employee Registration</h2>
+                </td>
+            </tr>
+            <tr>
+                <th>EMPLOYEE_NAME:</th>
+                <td>{{ form.employee_name }}</td>
+                <th>EMAIL ID:</th>
+                <td>{{ form.emailid }}</td>
+            </tr>
+            <tr>
+                <th>PHONE NUMBER:</th>
+                <td>{{ form.phonenum }}</td>
+                <th>DATEOFBIRTH:</th>
+                <td>{{ form.dateofbirth }}</td>
+            </tr>
+            <tr>
+                <th>PERMANENT ADDRESS:</th>
+                <td>{{ form.permanentaddress }}</td>
+                <th>CURRENT ADDRESS:</th>
+                <td>{{ form.presentaddress }}</td>
+            </tr>
+            <tr>
+                <th>GENDER:</th>
+                <td>{{ form.gender }}</td>
+                <th>BLOODGROUP:</th>
+                <td>{{ form.bloodgroup }}</td>
+            </tr>
+            <tr>
+                <th>STATUS:</th>
+                <td>{{ form.status }}</td>
+                <th>BANKACNUM:</th>
+                <td>{{ form.bankacnum }}</td>
+            </tr>
+            <tr>
+                <th>QUALIFICATION:</th>
+                <td>{{ form.qualification }}</td>
+                <th>AADHARCARD:</th>
+                <td>{{ form.aadharcard }}</td>
+            </tr>
+            <tr>
+                <th>PANCARD:</th>
+                <td>{{ form.pancard }}</td>
+                <th>PFNUM:</th>
+                <td>{{ form.pfnum }}</td>
+            </tr>
+            <tr>
+                <th>PFELIGIBLEDATE:</th>
+                <td>{{ form.pfeligibledate }}</td>
+                <th>LICENCENUM:</th>
+                <td>{{ form.licencenum }}</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <a type="button" class="btn btn-danger" href="/cancel">Cancel</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
+

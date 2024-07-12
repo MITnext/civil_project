@@ -100,16 +100,32 @@ class internaltransfer (models.Model):
     transferdate = models.DateTimeField()
 
 class addmaterial (models.Model):
+    customers = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    currentdate = models.DateTimeField(default=datetime.datetime.now)
+    transferdate = models.DateField()
     materials = models.ForeignKey(mastermateriallist, on_delete=models.CASCADE)
     categorys = models.ForeignKey(Category, on_delete=models.CASCADE)
     specifications = models.TextField()
     units = models.ForeignKey(unitmeasurement, on_delete=models.CASCADE)
     quantitys = models.IntegerField(blank=True, null=True)
+    requirementby = models.CharField(max_length = 200)
+    requirementto = models.CharField(max_length = 200)
 
 
-class employeeregistration (models.Model):
+#***************************************************************************************************************************
+
+
+from django.db import models
+from django.db import transaction
+
+class EmployeeIDCounter(models.Model):
+    letter = models.CharField(max_length=1, unique=True)
+    last_number = models.PositiveIntegerField(default=0)
+
+class employeeregistration(models.Model):
     employee_name = models.CharField(max_length=50)
-    employeenum = models.CharField(max_length=5)
+    employeeid = models.CharField(max_length=5, unique=True, blank=True)
     emailid = models.EmailField()
     phonenum = models.BigIntegerField()
     dateofbirth = models.DateField()
@@ -125,8 +141,28 @@ class employeeregistration (models.Model):
     pfnum = models.CharField(max_length=22)
     pfeligibledate = models.DateField()
     licencenum = models.CharField(max_length=16)
+
+    def save(self, *args, **kwargs):
+        if not self.employeeid:
+            self.employeeid = self.generate_employeeid()
+        super().save(*args, **kwargs)
+
+    def generate_employeeid(self):
+        first_letter = self.employee_name[0].upper()
+
+        with transaction.atomic():
+            counter, created = EmployeeIDCounter.objects.select_for_update().get_or_create(letter=first_letter)
+            counter.last_number += 1
+            counter.save()
+            employeeid = f"{first_letter}{counter.last_number:04d}"
+
+        return employeeid
+
     def __str__(self):
         return self.employee_name
+
+
+#****************************************************************************************************************
 
 class Client_registration(models.Model):
     client_name = models.CharField(max_length=100)
@@ -223,3 +259,16 @@ class WorkProgress(models.Model):
 
     def __str__(self):
         return f"Progress: {self.progress}%"
+
+
+
+
+class approvedinquiry(models.Model):
+    client = models.ForeignKey(Client_registration, on_delete=models.CASCADE)
+    employee = models.ForeignKey(employeeregistration, on_delete=models.CASCADE)
+    plotarea = models.IntegerField()
+    constructionarea = models.IntegerField()
+    constructioncost = models.IntegerField()
+    totalcost = models.IntegerField()
+    worktype = models.ForeignKey(worktypes, on_delete=models.CASCADE)
+

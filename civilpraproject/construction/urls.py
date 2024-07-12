@@ -66,8 +66,11 @@ urlpatterns = [
 
     # **************************************************************************
 
-
-    path('createaddmaterial', views.createaddmaterial),
+    path('createaddmaterial/', views.material_management, name='material_management'),
+    path('get-sites/<int:customer_id>/', views.get_sites, name='get_sites'),
+    path('searchaddmaterial/', views.searchaddmaterial),
+    path('updateaddmaterial/<int:id>', views.updateaddmaterial),
+    path('deleteaddmaterial/<int:id>', views.deleteaddmaterial),
 
     path('createinternaltransfer/', views.createinternaltransfer, name='createinternaltransfer'),
     path('get_brands_by_material/', views.get_brands_by_material, name='get_brands_by_material'),
@@ -75,9 +78,10 @@ urlpatterns = [
     path('updateinternaltransfer/<int:id>', views.updateinternaltransfer),
     path('deleteinternaltransfer/<int:id>', views.deleteinternaltransfer),
 
-
-    path('createempregistration', views.createempregistration),
-    path('searchempregistration',views.searchempregistration),
+    path('createempregistration', views.createempregistration, name='createempregistration'),
+    path('searchempregistration', views.searchempregistration),
+    path('updateempregistration/<int:id>', views.updateempregistration),
+    path('deleteempregistration/<int:id>', views.deleteempregistration),
 
 
     path('client_reg/', views.clientregview),
@@ -91,5 +95,12 @@ urlpatterns = [
     path('search_clientinquiry', views.search_clientinq),
     path('update_clientinquiry/<int:id>', views.update_clientinq),
     path('delete_clientinquiry/<int:id>', views.delete_clientinq),
+
+
+    path('approvedinquiry/', views.approvedinquiry_view, name='approvedinquiry'),
+    path('get_representatives/', views.get_representatives, name='get_representatives'),
+    path('search_approvedinquiry/', views.search_approvedinquiry, name='search_approvedinquiry'),
+    path('update_approvedinquiry/<int:id>', views.update_approvedinquiry),
+    path('delete_approvedinquiry/<int:id>', views.delete_approvedinquiry),
 
 ]

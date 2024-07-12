@@ -44,6 +44,10 @@ class worktypesform(forms.ModelForm):
         model = worktypes
         fields = ['worktypeid','worktypename','workdescription']
 
+class addmaterialform(forms.ModelForm):
+    class Meta:
+        model = addmaterial
+        fields = "__all__"
 
 class internaltransferform(forms.ModelForm):
     class Meta:
@@ -53,12 +57,13 @@ class internaltransferform(forms.ModelForm):
                   'drivernum','date','material','brand','unit','quantity','transferdate']
 
 
+
 class employeeregistrationform(forms.ModelForm):
     class Meta:
         model = employeeregistration
-        fields = ['employee_name','employeenum','emailid','phonenum','dateofbirth',
-                 'permanentaddress','presentaddress','gender','bloodgroup','status','bankacnum',
-                 'qualification','aadharcard','pancard','pfnum','pfeligibledate','licencenum']
+        fields = ['employee_name', 'emailid', 'phonenum', 'dateofbirth', 'permanentaddress', 'presentaddress',
+                  'gender', 'bloodgroup', 'status', 'bankacnum', 'qualification', 'aadharcard', 'pancard',
+                  'pfnum', 'pfeligibledate', 'licencenum']
 
 
 
@@ -117,6 +122,18 @@ class WorkProgressForm(forms.ModelForm):
         fields = ['photo', 'progress', 'worker_count', 'description']
         widgets = {
             'progress': forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100'}),
+        }
+
+
+
+class approvedinquiryform(forms.ModelForm):
+    class Meta:
+        model = approvedinquiry
+        fields = ['client', 'employee', 'plotarea', 'constructionarea', 'constructioncost', 'totalcost', 'worktype']
+        widgets = {
+            'constructionarea': forms.NumberInput(attrs={'id': 'constructionarea'}),
+            'constructioncost': forms.NumberInput(attrs={'id': 'constructioncost'}),
+            'totalcost': forms.NumberInput(attrs={'id': 'totalcost'}),
         }
 
 

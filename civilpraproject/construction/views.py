@@ -623,39 +623,100 @@ def deletesite(request, id):
 
 # **********************************************************************************************************************
 
+# from django.shortcuts import render, get_object_or_404, redirect
+# from django.http import JsonResponse
+# from .models import Customer, MasterMaterialList, Category, UnitMeasurement, AddMaterial, Site
+import json
+import datetime
 
-def createaddmaterial(request):
-    context = {}
-
-    materialname = mastermateriallist.objects.all()
-    categoryname = Category.objects.all()
-    unitmeasurementname = unitmeasurement.objects.all()
+def material_management(request):
+    customers = Customer.objects.all()
+    material_names = mastermateriallist.objects.all()
+    category_names = Category.objects.all()
+    unit_measurement_names = unitmeasurement.objects.all()
 
     if request.method == "POST":
-        material_data = request.POST.get('materialData', '[]')
-        material_list = json.loads(material_data)
+        material_data = request.POST.get('materialData')
+        customer_id = request.POST.get('customers')
+        site_id = request.POST.get('site')
+        current_date = request.POST.get('currentdate')
+        transfer_date = request.POST.get('transferdate')
+        requirement_by = request.POST.get('requirementby')
+        requirement_to = request.POST.get('requirementto')
 
-        for material_item in material_list:
-            material = mastermateriallist.objects.get(materialid=material_item['materialId'])
-            category = Category.objects.get(categoryid=material_item['categoryId'])
-            specifications = material_item['specifications']
-            unit = unitmeasurement.objects.get(unitmeasurementid=material_item['unitId'])
-            quantity = material_item['quantity']
+        if material_data:
+            material_list = json.loads(material_data)
+            customer = Customer.objects.get(id=customer_id)
+            site = Site.objects.get(id=site_id)
 
-            addmaterial.objects.create(
-                materials=material,
-                categorys=category,
-                specifications=specifications,
-                units=unit,
-                quantitys=quantity
-            )
+            for material_item in material_list:
+                material = mastermateriallist.objects.get(materialid=material_item['materialId'])
+                category = Category.objects.get(categoryid=material_item['categoryId'])
+                unit = unitmeasurement.objects.get(unitmeasurementid=material_item['unitId'])
+                quantity = material_item['quantity']
+                specifications = material_item['specifications']
 
-        messages.success(request, 'Materials have been saved successfully!')
+                addmaterial.objects.create(
+                    customers=customer,
+                    site=site,
+                    currentdate=current_date,
+                    transferdate=transfer_date,
+                    materials=material,
+                    categorys=category,
+                    specifications=specifications,
+                    units=unit,
+                    quantitys=quantity,
+                    requirementby=requirement_by,
+                    requirementto=requirement_to,
+                )
 
-    context["materialname"] = materialname
-    context["categoryname"] = categoryname
-    context["unitmeasurementname"] = unitmeasurementname
-    return render(request, "createaddmaterial.html", context)
+            return redirect('/searchaddmaterial')  # Redirect to a success page
+
+    return render(request, 'createaddmaterial.html', {
+        'customers': customers,
+        'material_names': material_names,
+        'category_names': category_names,
+        'unit_measurement_names': unit_measurement_names,
+    })
+
+
+def get_sites(request, customer_id):
+    customer = get_object_or_404(Customer, id=customer_id)
+    sites = Site.objects.filter(customer=customer)
+    site_list = [{'id': site.id, 'name': site.site_name} for site in sites]
+    return JsonResponse(site_list, safe=False)
+
+def searchaddmaterial(request):
+    addmates = addmaterial.objects.all()
+    return render(request, "searchaddmaterial.html", {'addmates': addmates})
+
+def updateaddmaterial(request,id):
+    addmates = addmaterial.objects.get(id=id)
+    form = addmaterialform(
+        initial={'customers': addmates.customers, 'site': addmates.site,'currentdate': addmates.currentdate,
+                 'transferdate': addmates.transferdate, 'materials': addmates.materials,'categorys': addmates.categorys,
+                 'specifications': addmates.specifications, 'units': addmates.units,'quantitys': addmates.quantitys,
+                 'requirementby': addmates.requirementby, 'requirementto': addmates.requirementto,})
+    if request.method == "POST":
+        form = addmaterialform(request.POST, instance=addmates)
+        if form.is_valid():
+            try:
+                form.save()
+                model = form.instance
+                return redirect('/searchaddmaterial')
+            except Exception as e:
+                pass
+    return render(request, 'updateaddmaterial.html', {'form': form})
+
+
+def deleteaddmaterial(request, id):
+    addmates = addmaterial.objects.get(id=id)
+    try:
+        addmates.delete()
+    except:
+        pass
+    return redirect('/searchaddmaterial')
+
 
 # **********************************************************************************************************************
 
@@ -761,23 +822,31 @@ def deleteinternaltransfer(request, id):
         pass
     return redirect('/searchinternaltransfer')
 
-# **************************************************************************************************************************
+#***************************************************************************************************************************
 
 
+from django.shortcuts import render, redirect
+from .forms import employeeregistrationform
 
 def createempregistration(request):
-    context = {}
     if request.method == 'POST':
-        print(request.POST)
-        empregist = employeeregistrationform(request.POST)
-        print(empregist)
-        print(empregist.is_valid())
-        if empregist.is_valid():
-            empregist.save()
-            return redirect('/searchempregistration')
-        print(empregist.is_valid())
-        context['form'] = empregist
-    return render(request, "createempregistration.html", context)
+        form = employeeregistrationform(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('createempregistration')  # Redirect to a list view or any other page
+    else:
+        form = employeeregistrationform()
+    return render(request, 'createempregistration.html', {'form': form})
+
+
+
+def generate_employeeid(request):
+    name = request.GET.get('name')
+    if name:
+        temp_employee = employeeregistration(employee_name=name)
+        employeeid = temp_employee.generate_employeeid()
+        return JsonResponse({'employeeid': employeeid})
+    return JsonResponse({'error': 'Invalid name'}, status=400)
 
 
 def searchempregistration(request):
@@ -785,7 +854,38 @@ def searchempregistration(request):
     return render(request, "searchempregistration.html", {'emplos': emplos})
 
 
-# *********************************************************************************************************************************
+def updateempregistration(request,id):
+    emplos = employeeregistration.objects.get(id=id)
+    form = employeeregistrationform(
+        initial={'employee_name': emplos.employee_name, 'employeeid': emplos.employeeid,'emailid': emplos.emailid,
+                 'phonenum': emplos.phonenum,'dateofbirth': emplos.dateofbirth,'permanentaddress': emplos.permanentaddress,'presentaddress': emplos.presentaddress,
+                 'gender': emplos.gender,'bloodgroup': emplos.bloodgroup,'status': emplos.status,
+                 'bankacnum': emplos.bankacnum,'qualification': emplos.qualification,'aadharcard': emplos.aadharcard,'pancard': emplos.pancard,
+                 'pfnum': emplos.pfnum,'pfeligibledate': emplos.pfeligibledate,'licencenum': emplos.licencenum,})
+    if request.method == "POST":
+        form = employeeregistrationform(request.POST, instance=emplos)
+        if form.is_valid():
+            try:
+                form.save()
+                model = form.instance
+                return redirect('/searchempregistration')
+            except Exception as e:
+                pass
+    return render(request, 'updateempregistration.html', {'form': form})
+
+
+
+def deleteempregistration(request, id):
+    emplos = employeeregistration.objects.get(id=id)
+    try:
+        emplos.delete()
+    except:
+        pass
+    return redirect('/searchempregistration')
+
+
+#***************************************************************************************************************************
+
 
 
 def clientregview(request):
@@ -904,3 +1004,75 @@ def constypeview(request):
 
     return render(request, "insertconstruction_type.html", context)
 
+
+
+#**********************************************************************************************************************************
+
+
+def approvedinquiry_view(request):
+    context = {}
+    form = approvedinquiryform(request.POST or None)
+    clients = Client_registration.objects.all()
+    employees = employeeregistration.objects.all()
+    work_types = worktypes.objects.all()
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('/search_approvedinquiry')  # Redirect to a success page after saving
+
+    context["form"] = form
+    context["clients"] = clients
+    context["employees"] = employees
+    context["work_types"] = work_types
+
+    return render(request, "approvedinquiry.html", context)
+
+def get_representatives(request):
+    client_id = request.GET.get('client_id')
+    representatives = employeeregistration.objects.filter(client_registration__id=client_id)
+    client = Client_registration.objects.get(id=client_id)
+    data = {
+        "representatives": [{"id": rep.id, "name": rep.employee_name} for rep in representatives],
+        "client_details": {
+            "name": client.client_name,
+            "phone_no": client.phone_no,
+            "email": client.email,
+            "site_address": client.site_address,
+            "inquiry_date": client.inquiry_date
+        }
+    }
+    return JsonResponse(data, safe=False)
+
+
+def search_approvedinquiry(request):
+    inquiries = approvedinquiry.objects.all()
+    return render(request, "searchapprovedinquiry.html", {'inquiries': inquiries})
+
+
+def update_approvedinquiry(request, id):
+    approveds = approvedinquiry.objects.get(id=id)
+    form = approvedinquiryform(
+        initial={'client': approveds.client, 'employee': approveds.employee,'plotarea': approveds.plotarea,
+                 'constructionarea': approveds.constructionarea, 'constructioncost': approveds.constructioncost,
+                 'totalcost': approveds.totalcost, 'worktype': approveds.worktype, })
+    if request.method == "POST":
+        form = approvedinquiryform(request.POST, instance=approveds)
+        if form.is_valid():
+            try:
+                form.save()
+                model = form.instance
+                return redirect('/search_approvedinquiry')
+            except Exception as e:
+                pass
+    return render(request, 'updateapprovedinquiry.html', {'form': form})
+
+
+
+def delete_approvedinquiry(request, id):
+    approveds = approvedinquiry.objects.get(id=id)
+    try:
+        approveds.delete()
+    except:
+        pass
+    return redirect('/search_approvedinquiry')
