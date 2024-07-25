@@ -1096,7 +1096,6 @@ def deleteempregistration(request, id):
 #     }
 #     return JsonResponse(data, safe=False)
 
-
 @auth
 def approvedinquiry_view(request):
     context = {}
@@ -1123,7 +1122,6 @@ def approvedinquiry_view(request):
 
     return render(request, "approvedinquiry.html", context)
 
-
 @auth
 def get_representatives(request):
     client_id = request.GET.get('client_id')
@@ -1145,7 +1143,6 @@ def get_representatives(request):
 def search_approvedinquiry(request):
     inquiries = approvedinquiry.objects.all()
     return render(request, "searchapprovedinquiry.html", {'inquiries': inquiries})
-
 
 @auth
 def update_approvedinquiry(request, id):
@@ -1174,7 +1171,6 @@ def delete_approvedinquiry(request, id):
     except:
         pass
     return redirect('/search_approvedinquiry')
-
 
 # *********************************************************************************************************************************
 
