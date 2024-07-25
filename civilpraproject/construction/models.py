@@ -1,8 +1,5 @@
 from django.db import models, transaction
-from datetime import timezone
-
 from django.db import models
-from django.utils import timezone
 import datetime
 from django.core.validators import EmailValidator, RegexValidator
 # Create your models here.
