@@ -282,3 +282,22 @@ class labourtransaction(models.Model):
     constructiontypes = models.ForeignKey(constructiontype, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
+class subcategory(models.Model):
+    subcategorys = models.CharField(max_length=100)
+    categorys = models.ForeignKey(mastermateriallist, on_delete=models.CASCADE)
+    brands = models.ForeignKey(brandlist, on_delete=models.CASCADE)
+    units = models.ForeignKey(unitmeasurement, on_delete=models.CASCADE)
+    unitper = models.DecimalField(max_digits=10, decimal_places=2)
+    def __str__(self):
+        return str(self.subcategorys)
+
+class selectproduct(models.Model):
+    customer = models.ForeignKey(approvedinquiry, on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    brand = models.ForeignKey(brandlist, on_delete=models.CASCADE)
+    category = models.ForeignKey(mastermateriallist, on_delete=models.CASCADE)
+    subcategorys = models.ForeignKey(subcategory, on_delete=models.CASCADE, related_name='selected_subcategories')
+    unit = models.ForeignKey(unitmeasurement, on_delete=models.CASCADE)
+    unitprice = models.FloatField()  # Store the derived unit price
+    quantity = models.IntegerField(blank=True, null=True)
+    totalprice = models.FloatField(blank=True, null=True)

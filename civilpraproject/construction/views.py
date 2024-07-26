@@ -1397,3 +1397,201 @@ def delete_labourtransaction(request, id):
     except:
         pass
     return redirect('/search_labourtransaction')
+
+import json
+from django.shortcuts import render
+from django.contrib import messages
+from .models import mastermateriallist, brandlist, unitmeasurement, subcategory
+
+
+def createsubcategory(request):
+    context = {}
+
+    # Fetch data for the dropdowns
+    materialname = mastermateriallist.objects.all()
+    brandname = brandlist.objects.all()
+    unitmeasurementname = unitmeasurement.objects.all()
+
+    if request.method == "POST":
+        # Get the JSON data from the form
+        subcategory_data = request.POST.get('subcategoryData', '[]')
+
+        try:
+            # Load the JSON data
+            subcategory_list = json.loads(subcategory_data)
+
+            # Iterate over each item in the list
+            for subcategory_item in subcategory_list:
+                # Extract data from each item
+                material_id = subcategory_item.get('materialId')
+                brand_id = subcategory_item.get('brandId')
+                unit_id = subcategory_item.get('unitId')
+                subcategory_name = subcategory_item.get('subcategoryName')
+                unit_per = subcategory_item.get('unitPer')
+
+                # Fetch the corresponding objects from the database
+                material = mastermateriallist.objects.get(materialid=material_id)
+                brand = brandlist.objects.get(id=brand_id)
+                unit = unitmeasurement.objects.get(unitmeasurementid=unit_id)
+
+                # Create a new subcategory object
+                subcategory.objects.create(
+                    subcategorys=subcategory_name,
+                    categorys=material,
+                    brands=brand,
+                    units=unit,
+                    unitper=unit_per
+                )
+
+            messages.success(request, 'Subcategories have been saved successfully!')
+
+        except json.JSONDecodeError:
+            messages.error(request, 'Failed to decode JSON data.')
+        except mastermateriallist.DoesNotExist:
+            messages.error(request, 'Material not found.')
+        except brandlist.DoesNotExist:
+            messages.error(request, 'Brand not found.')
+        except unitmeasurement.DoesNotExist:
+            messages.error(request, 'Unit not found.')
+        except Exception as e:
+            messages.error(request, f'An error occurred: {str(e)}')
+
+    # Add context data for rendering the form
+    context["materialname"] = materialname
+    context["brandname"] = brandname
+    context["unitmeasurementname"] = unitmeasurementname
+
+    return render(request, "createsubcategory.html", context)
+
+
+def searchsubcategory(request):
+    sub = subcategory.objects.all()
+    return render(request, "searchsubcategory.html", {'sub': sub})
+
+def updatesubcategory(request, id):
+    sub = subcategory.objects.get(id=id)
+    form = subcategoryform(
+        initial={'subcategorys': sub.subcategorys, 'categorys': sub.categorys, 'brands': sub.brands, 'units': sub.units, 'unitper': sub.unitper })
+    if request.method == "POST":
+        form = subcategoryform(request.POST, instance=sub)
+        if form.is_valid():
+            try:
+                form.save()
+                model = form.instance
+                return redirect('/searchsubcategory')
+            except Exception as e:
+                pass
+    return render(request, 'updatesubcategory.html', {'form': form})
+
+
+def deletesubcategory(request, id):
+    sub = subcategory.objects.get(id=id)
+    try:
+        sub.delete()
+    except:
+        pass
+    return redirect('/searchsubcategory')
+
+
+#*****************************************************************************************************************************
+@auth
+def create_selectproduct(request):
+    context = {}
+
+    customers_list = approvedinquiry.objects.all()
+    sites_list = Site.objects.all()
+    brands_list = brandlist.objects.all()
+
+    if request.method == "POST":
+        form = selectproductform(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Product selection has been saved successfully!')
+            return redirect('/searchselectproduct')
+        else:
+            print(request.POST)
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = selectproductform()
+
+    context["form"] = form
+    context["customers_list"] = customers_list
+    context["sites_list"] = sites_list
+    context["brands_list"] = brands_list
+
+    return render(request, "addproduct.html", context)
+
+@auth
+def load_sites(request):
+    customer_id = request.GET.get('customer')
+    sites_list = Site.objects.filter(customer_id=customer_id).distinct()
+    return JsonResponse(list(sites_list.values('id', 'site_name')), safe=False)
+
+@auth
+def load_categories(request):
+    brand_id = request.GET.get('brand')
+    subcategories = subcategory.objects.filter(brands_id=brand_id).distinct()
+    category_ids = subcategories.values_list('categorys_id', flat=True).distinct()
+    categories = mastermateriallist.objects.filter(materialid__in=category_ids).distinct()
+    return JsonResponse(list(categories.values('materialid', 'materialname')), safe=False)
+@auth
+def load_subcategories(request):
+    category_id = request.GET.get('category')
+    subcategories = subcategory.objects.filter(categorys_id=category_id).distinct()
+    return JsonResponse(list(subcategories.values('id', 'subcategorys')), safe=False)
+
+@auth
+
+def load_units_and_price(request):
+    subcategory_id = request.GET.get('subcategory')
+    subcategory_obj = subcategory.objects.get(id=subcategory_id)
+    unit = subcategory_obj.units
+    print("Unit object:", unit)
+    print("Unit ID:", unit.pk)  # Debugging line
+    unitprice = subcategory_obj.unitper
+    data = {
+        'unit_id': unit.pk,
+        'unit_name': unit.unitmeasurementname,
+        'unitprice': unitprice
+    }
+    return JsonResponse(data)
+
+
+@auth
+
+def searchselectproduct(request):
+    product = selectproduct.objects.all()
+    return render(request, "searchselectproduct.html", {'product': product})
+
+
+@auth
+
+def updateselectproduct(request, id):
+    product = selectproduct.objects.get(id=id)
+    form = selectproductform(
+        initial={'customer': product.customer, 'site': product.site,
+                 'brand': product.brand,'category': product.category,
+                 'subcategorys': product.subcategorys,'unit': product.unit,
+                 'unitprice': product.unitprice,'quantity': product.quantity,
+                 'totalprice': product.totalprice})
+    if request.method == "POST":
+        form = selectproductform(request.POST, instance=product)
+        if form.is_valid():
+            try:
+                form.save()
+                model = form.instance
+                return redirect('/searchselectproduct')
+            except Exception as e:
+                pass
+    return render(request, 'updateselectproduct.html', {'form': form})
+
+
+@auth
+
+def deleteselectproduct(request, id):
+    product = selectproduct.objects.get(id=id)
+    try:
+        product.delete()
+    except:
+        pass
+    return redirect('/searchselectproduct')

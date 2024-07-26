@@ -130,4 +130,20 @@ urlpatterns = [
     path('update_labourtransaction/<int:id>', views.update_labourtransaction,  name='update_labourtransaction'),
     path('delete_labourtransaction/<int:id>', views.delete_labourtransaction,  name='delete_labourtransaction'),
 
+path('createsubcategory/', views.createsubcategory, name='createsubcategory'),
+    path('searchsubcategory/', views.searchsubcategory),
+    path('updatesubcategory/<int:id>', views.updatesubcategory),
+    path('deletesubcategory/<int:id>', views.deletesubcategory),
+
+    path('create_selectproduct/', views.create_selectproduct, name='create_selectproduct'),
+    path('ajax/load-sites/', views.load_sites, name='load_sites'),
+    path('ajax/load-categories/', views.load_categories, name='load_categories'),
+    path('ajax/load-subcategories/', views.load_subcategories, name='load_subcategories'),
+    path('ajax/load-units-and-price/', views.load_units_and_price, name='load_units_and_price'),
+    path('searchselectproduct/', views.searchselectproduct),
+    path('updateselectproduct/<int:id>', views.updateselectproduct),
+    path('deleteselectproduct/<int:id>', views.deleteselectproduct),
+
+
+
 ]

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Product</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .add-btn, .save-btn {
+            width: 48%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-block;
+            margin: 5px 1%;
+        }
+        .add-btn:hover, .save-btn:hover {
+            background-color: #45a049;
+        }
+        .button-group {
+            text-align: center;
+        }
+        .added-products {
+            margin-top: 20px;
+        }
+        .added-products table {
+            width: 100%;
+        }
+        .added-products th, .added-products td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .added-products th {
+            background-color: #f2f2f2;
+        }
+        .remove-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select Product</h1>
+    <form id="product-form" method="post" action="{% url 'create_selectproduct' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th><label for="id_customer">Customer</label></th>
+                <td>
+                    <select id="id_customer" name="customer" class="form-control">
+                        <option value="">Select Customer</option>
+                        {% for customer in customers_list %}
+                            <option value="{{ customer.id }}">{{ customer.customer_name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="id_site">Site</label></th>
+                <td>
+                    <select id="id_site" name="site" class="form-control">
+                        <option value="">Select Site</option>
+                        {% for site in sites_list %}
+                            <option value="{{ site.id }}">{{ site.site_name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="id_brand">Brand</label></th>
+                <td>
+                    <select id="id_brand" name="brand" class="form-control">
+                        <option value="">Select Brand</option>
+                        {% for brand in brands_list %}
+                            <option value="{{ brand.id }}">{{ brand.brandname }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="id_category">Category</label></th>
+                <td>
+                    <select id="id_category" name="category" class="form-control">
+                        <option value="">Select Category</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="id_subcategory">Subcategory</label></th>
+                <td>
+                    <select id="id_subcategory" name="subcategorys" class="form-control">
+                        <option value="">Select Subcategory</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="id_unit">Unit</label></th>
+                <td>
+                    <input type="text" id="id_unit" name="unit_name" class="form-control" readonly>
+                    <input type="hidden" id="id_unit_hidden" name="unit">
+                </td>
+            </tr>
+            <tr>
+                <th><label for="id_unitprice">Unit Price</label></th>
+                <td>
+                    <input type="text" id="id_unitprice" name="unitprice" class="form-control" readonly>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="id_quantity">Quantity</label></th>
+                <td>
+                    <input type="number" id="id_quantity" name="quantity" class="form-control">
+                </td>
+            </tr>
+            <tr>
+                <th><label for="id_totalprice">Total Price</label></th>
+                <td>
+                    <input type="text" id="id_totalprice" name="totalprice" class="form-control" readonly>
+                </td>
+            </tr>
+        </table>
+        <div class="button-group">
+            <button type="button" class="add-btn" id="add-product-btn">Add</button>
+        </div>
+        <div class="added-products" id="added-products">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Site</th>
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th>Subcategory</th>
+                        <th>Unit</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="button-group">
+            <button type="submit" class="save-btn">Save</button>
+        </div>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#id_customer').change(function() {
+                var customerId = $(this).val();
+                $.ajax({
+                    url: '{% url "load_sites" %}',
+                    data: {'customer': customerId},
+                    success: function(data) {
+                        var options = '<option value="">Select Site</option>';
+                        data.forEach(function(site) {
+                            options += `<option value="${site.id}">${site.site_name}</option>`;
+                        });
+                        $('#id_site').html(options);
+                    }
+                });
+            });
+
+            $('#id_brand').change(function() {
+                var brandId = $(this).val();
+                $.ajax({
+                    url: '{% url "load_categories" %}',
+                    data: {'brand': brandId},
+                    success: function(data) {
+                        var options = '<option value="">Select Category</option>';
+                        data.forEach(function(category) {
+                            options += `<option value="${category.materialid}">${category.materialname}</option>`;
+                        });
+                        $('#id_category').html(options);
+                    }
+                });
+            });
+
+            $('#id_category').change(function() {
+                var categoryId = $(this).val();
+                $.ajax({
+                    url: '{% url "load_subcategories" %}',
+                    data: {'category': categoryId},
+                    success: function(data) {
+                        var options = '<option value="">Select Subcategory</option>';
+                        data.forEach(function(subcategory) {
+                            options += `<option value="${subcategory.id}">${subcategory.subcategorys}</option>`;
+                        });
+                        $('#id_subcategory').html(options);
+                    }
+                });
+            });
+
+            $('#id_subcategory').change(function() {
+                var subcategoryId = $(this).val();
+                $.ajax({
+                    url: '{% url "load_units_and_price" %}',
+                    data: {'subcategory': subcategoryId},
+                    success: function(data) {
+                        $('#id_unit').val(data.unit_name);
+                        $('#id_unit_hidden').val(data.unit_id);
+                        $('#id_unitprice').val(data.unitprice);
+                    }
+                });
+            });
+
+            $('#id_quantity').keyup(function() {
+                var unitPrice = parseFloat($('#id_unitprice').val());
+                var quantity = parseInt($(this).val());
+                if (!isNaN(unitPrice) && !isNaN(quantity)) {
+                    $('#id_totalprice').val((unitPrice * quantity).toFixed(2));
+                } else {
+                    $('#id_totalprice').val('');
+                }
+            });
+
+            $('#add-product-btn').click(function() {
+                var customer = $('#id_customer option:selected').text();
+                var customerId = $('#id_customer').val();
+                var site = $('#id_site option:selected').text();
+                var siteId = $('#id_site').val();
+                var brand = $('#id_brand option:selected').text();
+                var brandId = $('#id_brand').val();
+                var category = $('#id_category option:selected').text();
+                var categoryId = $('#id_category').val();
+                var subcategory = $('#id_subcategory option:selected').text();
+                var subcategoryId = $('#id_subcategory').val();
+                var unit = $('#id_unit').val();
+                var unitId = $('#id_unit_hidden').val();
+                var unitPrice = $('#id_unitprice').val();
+                var quantity = $('#id_quantity').val();
+                var totalPrice = $('#id_totalprice').val();
+
+                if (customer && site && brand && category && subcategory && unit && unitPrice && quantity && totalPrice) {
+                    var newRow = `<tr>
+                        <td><input type="hidden" name="customer" value="${customerId}">${customer}</td>
+                        <td><input type="hidden" name="site" value="${siteId}">${site}</td>
+                        <td><input type="hidden" name="brand" value="${brandId}">${brand}</td>
+                        <td><input type="hidden" name="category" value="${categoryId}">${category}</td>
+                        <td><input type="hidden" name="subcategorys" value="${subcategoryId}">${subcategory}</td>
+                        <td><input type="hidden" name="unit" value="${unitId}">${unit}</td>
+                        <td><input type="hidden" name="unitprice" value="${unitPrice}">${unitPrice}</td>
+                        <td><input type="hidden" name="quantity" value="${quantity}">${quantity}</td>
+                        <td><input type="hidden" name="totalprice" value="${totalPrice}">${totalPrice}</td>
+                        <td><button type="button" class="remove-btn">Remove</button></td>
+                    </tr>`;
+                    $('#added-products tbody').append(newRow);
+
+                    // Clear the form fields
+                    $('#id_brand').val('');
+                    $('#id_category').html('<option value="">Select Category</option>');
+                    $('#id_subcategory').html('<option value="">Select Subcategory</option>');
+                    $('#id_unit').val('');
+                    $('#id_unit_hidden').val('');
+                    $('#id_unitprice').val('');
+                    $('#id_quantity').val('');
+                    $('#id_totalprice').val('');
+                } else {
+                    alert('Please fill all fields before adding.');
+                }
+            });
+
+            $(document).on('click', '.remove-btn', function() {
+                $(this).closest('tr').remove();
+            });
+        });
+    </script>
+</body>
+</html>
