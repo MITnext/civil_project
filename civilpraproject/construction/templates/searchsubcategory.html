@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sub-Category List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 2px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1 class="m-4 text-center">Search Sub Category <a href="/createsubcategory/" class="btn btn-primary">Add Sub Category</a></h1>
+
+<table>
+    <tr>
+        <th>SUBCATEGORYS</th>
+        <th>CATEGORYS</th>
+        <th>BRANDS</th>
+        <th>UNITS</th>
+        <th>UNITPER</th>
+        <th>ACTION</th>
+    </tr>
+    {% for i in sub %}
+    <tr>
+        <td>{{ i.subcategorys }}</td>
+        <td>{{ i.categorys }}</td>
+        <td>{{ i.brands }}</td>
+        <td>{{ i.units }}</td>
+        <td>{{ i.unitper }}</td>
+        <td>
+            <a href="/updatesubcategory/{{ i.id }}">update</a>
+            <a href="/deletesubcategory/{{ i.id }}">delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
