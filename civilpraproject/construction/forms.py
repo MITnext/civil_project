@@ -139,3 +139,15 @@ class labourtransform(forms.ModelForm):
         model = labourtransaction
         fields = "__all__"
 
+
+
+class subcategoryform(forms.ModelForm):
+    class Meta:
+        model = subcategory
+        fields = ['subcategorys','categorys','brands','units','unitper']
+
+
+class selectproductform(forms.ModelForm):
+    class Meta:
+        model = selectproduct
+        fields = "__all__"

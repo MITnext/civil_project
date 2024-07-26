@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Product</title>
+    <style>
+        table {
+            width: 50%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        tr {
+            height: 50px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            font-size: 20px;
+        }
+        input {
+            border: 1px solid;
+            padding: 12px;
+            font-size: 15px;
+        }
+        button {
+            padding: 10px 50px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td colspan="2" align="center">
+                    <h2>Select Product</h2>
+                </td>
+            </tr>
+            <tr>
+                <th>CUSTOMER:</th>
+                <td>{{ form.customer }}</td>
+            </tr>
+            <tr>
+                <th>SITE:</th>
+                <td>{{ form.site }}</td>
+            </tr>
+            <tr>
+                <th>BRAND:</th>
+                <td>{{ form.brand }}</td>
+            </tr>
+            <tr>
+                <th>CATEGORY:</th>
+                <td>{{ form.category }}</td>
+            </tr>
+            <tr>
+                <th>SUBCATEGORY:</th>
+                <td>{{ form.subcategorys }}</td>
+            </tr>
+            <tr>
+                <th>UNIT:</th>
+                <td>{{ form.unit }}</td>
+            </tr>
+            <tr>
+                <th>UNIT PRICE:</th>
+                <td>{{ form.unitprice }}</td>
+            </tr>
+            <tr>
+                <th>QUANTITY:</th>
+                <td>{{ form.quantity }}</td>
+            </tr>
+            <tr>
+                <th>TOTAL PRICE:</th>
+                <td>{{ form.totalprice }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <a type="button" class="btn btn-danger" href="/cancel">Cancel</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

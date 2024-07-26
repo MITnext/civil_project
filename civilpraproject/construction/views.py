@@ -7,44 +7,48 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from datetime import datetime
-from django.shortcuts import render,redirect
-from django.contrib.auth.forms import UserCreationForm ,AuthenticationForm
-from django.contrib.auth import login , logout
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout
 from .middlewares import *
+
 
 def register_views(request):
     if request.method == 'POST':
-        form= UserCreationForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request,user)
+            login(request, user)
             return redirect('/land')
     else:
-        inital_data={'username':'', 'password':'','password2':''}
-        form = UserCreationForm(initial = inital_data)
+        inital_data = {'username': '', 'password': '', 'password2': ''}
+        form = UserCreationForm(initial=inital_data)
 
-    return render(request,'auth/register.html',{'form':form})
+    return render(request, 'auth/register.html', {'form': form})
+
 
 def login_views(request):
-    if request.method=='POST':
-        form = AuthenticationForm(request,data=request.POST)
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request,user)
+            login(request, user)
             return redirect('/land')
     else:
         inital_data = {'username': '', 'password': ''}
-        form = AuthenticationForm(initial = inital_data)
-    return render(request,'auth/login.html',{'form':form})
+        form = AuthenticationForm(initial=inital_data)
+    return render(request, 'auth/login.html', {'form': form})
 
 
 def logout_views(request):
     logout(request)
     return redirect('login')
 
+
 @auth
 def dashboard_views(request):
-    return render(request,'dashboard.html')
+    return render(request, 'dashboard.html')
+
 
 # ********************************************************************************************
 @auth
@@ -61,15 +65,15 @@ def vendor_registration(request):
 
     return render(request, "vendor_registration.html", context)
 
-@auth
 
+@auth
 def search_vendor_registration(request):
     records = Vendor.objects.all()
     mydict = {'records': records}
     return render(request, 'searchvendorreg.html', context=mydict)
 
-@auth
 
+@auth
 def update_vendor_registration(request, id):
     branch = Vendor.objects.get(id=id)
     form = VendorForm(
@@ -89,8 +93,8 @@ def update_vendor_registration(request, id):
                 pass
     return render(request, 'updatevendorreg.html', {'form': form})
 
-@auth
 
+@auth
 def delete_vendor_registration(request, id):
     data = Vendor.objects.get(id=id)
     try:
@@ -99,8 +103,8 @@ def delete_vendor_registration(request, id):
         pass
     return redirect('/search_vendor-registration')
 
-@auth
 
+@auth
 def roughdrawing(request):
     context = {}
     rough = roughForm(request.POST or None)
@@ -116,15 +120,15 @@ def roughdrawing(request):
 
     return render(request, "rough_drawing.html", context)
 
-@auth
 
+@auth
 def search_roughdrawing(request):
     records = RoughDrawing.objects.all()
     mydict = {'records': records}
     return render(request, 'searchroughdrawing.html', context=mydict)
 
-@auth
 
+@auth
 def update_roughdrawing(request, id):
     branch = RoughDrawing.objects.get(id=id)
     form = roughForm(
@@ -142,8 +146,8 @@ def update_roughdrawing(request, id):
                 pass
     return render(request, 'updateroughdrawing.html', {'form': form})
 
-@auth
 
+@auth
 def delete_roughdrawing(request, id):
     data = RoughDrawing.objects.get(id=id)
     try:
@@ -152,8 +156,8 @@ def delete_roughdrawing(request, id):
         pass
     return redirect('/search_rough_drawing')
 
-@auth
 
+@auth
 def Add_finaldrawing(request):
     context = {}
     final = finalForm(request.POST or None)
@@ -169,15 +173,15 @@ def Add_finaldrawing(request):
 
     return render(request, "final_drawing.html", context)
 
-@auth
 
+@auth
 def search_finaldrawing(request):
     records = finaldrawing.objects.all()
     mydict = {'records': records}
     return render(request, 'searchfinaldrawing.html', context=mydict)
 
-@auth
 
+@auth
 def update_finaldrawing(request, id):
     branch = finaldrawing.objects.get(id=id)
     form = finalForm(
@@ -195,8 +199,8 @@ def update_finaldrawing(request, id):
                 pass
     return render(request, 'updatefinaldrawing.html', {'form': form})
 
-@auth
 
+@auth
 def delete_finaldrawing(request, id):
     data = finaldrawing.objects.get(id=id)
     try:
@@ -205,8 +209,8 @@ def delete_finaldrawing(request, id):
         pass
     return redirect('/search_final_drawing')
 
-@auth
 
+@auth
 def constypeview(request):
     context = {}
     cons = constypeForm(request.POST or None)
@@ -222,15 +226,15 @@ def constypeview(request):
 
     return render(request, "insertconstruction_type.html", context)
 
-@auth
 
+@auth
 def search_constypeview(request):
     records = constructiontype.objects.all()
     mydict = {'records': records}
     return render(request, 'searchconstruction_type.html', context=mydict)
 
-@auth
 
+@auth
 def update_constypeview(request, id):
     branch = constructiontype.objects.get(id=id)
     form = constypeForm(
@@ -246,8 +250,8 @@ def update_constypeview(request, id):
                 pass
     return render(request, 'updateconstruction_type.html', {'form': form})
 
-@auth
 
+@auth
 def delete_constypeview(request, id):
     records = constructiontype.objects.get(id=id)
     try:
@@ -255,7 +259,6 @@ def delete_constypeview(request, id):
     except:
         pass
     return redirect('/searchconstruction_type')
-
 
 
 @auth
@@ -310,10 +313,12 @@ def assign_view(request):
 
     return render(request, "task_assignments.html", context)
 
+
 def get_sites(request, customer_id):
     sites = Site.objects.filter(customer_id=customer_id)
     site_list = [{'id': site.id, 'site_name': site.site_name} for site in sites]
     return JsonResponse(site_list, safe=False)
+
 
 @auth
 def update_task(request, task_id):
@@ -350,6 +355,7 @@ def update_task(request, task_id):
         'error_message': None
     })
 
+
 @auth
 def calculate_status_upto(task):
     today = datetime.now().date()
@@ -362,10 +368,12 @@ def calculate_status_upto(task):
             return 100
     return 0
 
+
 @auth
 def search_assigntransaction(request):
     sea = Taskttransaction.objects.all()
     return render(request, "search_Taskttransaction.html", {'task': sea})
+
 
 @auth
 def delete_assigntransaction(request, id):
@@ -381,6 +389,7 @@ def delete_assigntransaction(request, id):
 def search_assignmasterdata(request):
     sea = masterdata.objects.all()
     return render(request, "search_masterdata.html", {'data': sea})
+
 
 @auth
 def update_masterdata(request, id):
@@ -398,6 +407,7 @@ def update_masterdata(request, id):
                 pass
     return render(request, 'update_masterdata.html', {'form': form})
 
+
 @auth
 def delete_masterdata(request, id):
     data = masterdata.objects.get(id=id)
@@ -406,9 +416,6 @@ def delete_masterdata(request, id):
     except:
         pass
     return redirect('/search_masterdata')
-
-
-
 
 
 @auth
@@ -423,13 +430,11 @@ def add_work_progress(request):
         form = WorkProgressForm()
     return render(request, 'add_work_progress.html', {'form': form})
 
+
 @auth
 def work_progress_list(request):
     progress_list = WorkProgress.objects.all()
     return render(request, 'work_progress_list.html', {'progress_list': progress_list})
-
-
-
 
 
 # *****************************************************************************************************************
@@ -454,7 +459,6 @@ def customer_site_task_list(request):
     return render(request, 'task_search.html', context)
 
 
-
 @auth
 def assignee_task_list(request):
     assignees = employeeregistration.objects.all()
@@ -462,9 +466,12 @@ def assignee_task_list(request):
     selected_customer = request.GET.get('customer')
     selected_site = request.GET.get('site')
 
-    customers = approvedinquiry.objects.filter(masterdata__taskttransaction__assign_to_id=selected_assignee).distinct() if selected_assignee else approvedinquiry.objects.none()
-    sites = Site.objects.filter(masterdata__taskttransaction__assign_to_id=selected_assignee, customer_id=selected_customer).distinct() if selected_assignee and selected_customer else Site.objects.none()
-    tasks = Taskttransaction.objects.filter(assign_to_id=selected_assignee, customersid__customer_id=selected_customer, customersid__site_id=selected_site) if selected_assignee and selected_customer and selected_site else Taskttransaction.objects.none()
+    customers = approvedinquiry.objects.filter(
+        masterdata__taskttransaction__assign_to_id=selected_assignee).distinct() if selected_assignee else approvedinquiry.objects.none()
+    sites = Site.objects.filter(masterdata__taskttransaction__assign_to_id=selected_assignee,
+                                customer_id=selected_customer).distinct() if selected_assignee and selected_customer else Site.objects.none()
+    tasks = Taskttransaction.objects.filter(assign_to_id=selected_assignee, customersid__customer_id=selected_customer,
+                                            customersid__site_id=selected_site) if selected_assignee and selected_customer and selected_site else Taskttransaction.objects.none()
 
     context = {
         'assignees': assignees,
@@ -476,6 +483,7 @@ def assignee_task_list(request):
         'selected_site': selected_site,
     }
     return render(request, 'assignee_task_list.html', context)
+
 
 # *********************************************ooooooooo************************************
 
@@ -498,6 +506,7 @@ def creatematerial(request):
         context['form'] = materialform
     return render(request, "creatematerial.html", context)
 
+
 @auth
 def searchmaterial(request):
     materials = mastermateriallist.objects.all()
@@ -508,7 +517,7 @@ def searchmaterial(request):
 def updatematerial(request, materialid):
     materials = mastermateriallist.objects.get(materialid=materialid)
     form = mastermateriallistform(
-        initial={'materialname': materials.materialname,})
+        initial={'materialname': materials.materialname, })
     if request.method == "POST":
         form = mastermateriallistform(request.POST, instance=materials)
         if form.is_valid():
@@ -531,13 +540,9 @@ def deletematerial(request, materialid):
     return redirect('/searchmaterial')
 
 
-
-
-
 # *******************************************************************************************************************
 @auth
 def createconstructionlevel(request):
-
     context = {}
     contruct = constructionlevelform(request.POST or None)
     if contruct.is_valid():
@@ -548,10 +553,11 @@ def createconstructionlevel(request):
     else:
         print("HELOO______________________________________________________111")
         print(request.POST)
-        messages.error(request,contruct.errors)
+        messages.error(request, contruct.errors)
         context['form'] = contruct
 
     return render(request, "createconstructionlevel.html", context)
+
 
 @auth
 def searchconstructionlevel(request):
@@ -560,10 +566,10 @@ def searchconstructionlevel(request):
 
 
 @auth
-def updateconstructionlevel(request,id):
+def updateconstructionlevel(request, id):
     level = constructionlevel.objects.get(id=id)
     form = constructionlevelform(
-        initial={'constructionlevelname': level.constructionlevelname, 'description': level.description,})
+        initial={'constructionlevelname': level.constructionlevelname, 'description': level.description, })
     if request.method == "POST":
         form = constructionlevelform(request.POST, instance=level)
         if form.is_valid():
@@ -575,6 +581,7 @@ def updateconstructionlevel(request,id):
                 pass
     return render(request, 'updateconstructionlevel.html', {'form': form})
 
+
 @auth
 def deleteconstructionlevel(request, id):
     level = constructionlevel.objects.get(id=id)
@@ -584,7 +591,8 @@ def deleteconstructionlevel(request, id):
         pass
     return redirect('/searchconstructionlevel')
 
-#******************************************************************************************************************
+
+# ******************************************************************************************************************
 
 @auth
 def createcategory(request):
@@ -601,6 +609,7 @@ def createcategory(request):
         print(catform.is_valid())
         context['form'] = catform
     return render(request, "createcategory.html", context)
+
 
 @auth
 def searchcategory(request):
@@ -654,6 +663,7 @@ def createunitmeasurement(request):
         context['form'] = unitform
     return render(request, "createunit.html", context)
 
+
 @auth
 def searchunitmeasurement(request):
     units = unitmeasurement.objects.all()
@@ -686,6 +696,7 @@ def deleteunitmeasurement(request, unitmeasurementid):
         pass
     return redirect('/searchunit')
 
+
 # *****************************************************************************************************************
 @auth
 def createbrand(request):
@@ -707,13 +718,15 @@ def createbrand(request):
     context["materialname"] = materialname
     return render(request, "createbrand.html", context)
 
+
 @auth
 def searchbrand(request):
     brands = brandlist.objects.all()
     return render(request, "searchbrand.html", {'brands': brands})
 
+
 @auth
-def updatebrand(request,id):
+def updatebrand(request, id):
     brands = brandlist.objects.get(id=id)
     form = brandform(
         initial={'brandname': brands.brandname, 'materialnames': brands.materialnames, })
@@ -760,18 +773,20 @@ def createsite(request):
     context["customer_name"] = customer_name
     return render(request, "createsite.html", context)
 
+
 @auth
 def searchsite(request):
     sitess = Site.objects.all()
     return render(request, "searchsite.html", {'sitess': sitess})
 
+
 @auth
-def updatesite(request,id):
+def updatesite(request, id):
     sitess = Site.objects.get(id=id)
     form = siteform(
-        initial={'site_name': sitess.site_name, 'ownername': sitess.ownername,'pincode': sitess.pincode,
-                 'state': sitess.state,'city': sitess.city,
-                 'houseno': sitess.houseno,'roadname': sitess.roadname,'address': sitess.address,})
+        initial={'site_name': sitess.site_name, 'ownername': sitess.ownername, 'pincode': sitess.pincode,
+                 'state': sitess.state, 'city': sitess.city,
+                 'houseno': sitess.houseno, 'roadname': sitess.roadname, 'address': sitess.address, })
     if request.method == "POST":
         form = siteform(request.POST, instance=sitess)
         if form.is_valid():
@@ -851,6 +866,7 @@ def createinternaltransfer(request):
     context["unit_list"] = unit_list
     return render(request, "createinternaltransfer.html", context)
 
+
 @auth
 def get_brands_by_material(request):
     material_id = request.GET.get('material_id')
@@ -866,14 +882,18 @@ def searchinternaltransfer(request):
 
 
 @auth
-def updateinternaltransfer(request,id):
+def updateinternaltransfer(request, id):
     internals = internaltransfer.objects.get(id=id)
     form = internaltransferform(
-        initial={'executiveengineer': internals.executiveengineer, 'executiveengineernum': internals.executiveengineernum,'sourceclientname': internals.sourceclientname,
-                 'sourceaddress': internals.sourceaddress, 'destinationclientname': internals.destinationclientname,'destinationaddress': internals.destinationaddress,
-                 'vehiclename': internals.vehiclename, 'vehiclenum': internals.vehiclenum,'drivername': internals.drivername,
-                 'drivernum': internals.drivernum, 'date': internals.date,'material': internals.material,
-                 'brand': internals.brand, 'unit': internals.unit,'quantity': internals.quantity,'transferdate': internals.transferdate,})
+        initial={'executiveengineer': internals.executiveengineer,
+                 'executiveengineernum': internals.executiveengineernum, 'sourceclientname': internals.sourceclientname,
+                 'sourceaddress': internals.sourceaddress, 'destinationclientname': internals.destinationclientname,
+                 'destinationaddress': internals.destinationaddress,
+                 'vehiclename': internals.vehiclename, 'vehiclenum': internals.vehiclenum,
+                 'drivername': internals.drivername,
+                 'drivernum': internals.drivernum, 'date': internals.date, 'material': internals.material,
+                 'brand': internals.brand, 'unit': internals.unit, 'quantity': internals.quantity,
+                 'transferdate': internals.transferdate, })
     if request.method == "POST":
         form = internaltransferform(request.POST, instance=internals)
         if form.is_valid():
@@ -894,6 +914,7 @@ def deleteinternaltransfer(request, id):
     except:
         pass
     return redirect('/searchinternaltransfer')
+
 
 # **************************************************************************************************************************
 
@@ -948,6 +969,7 @@ def material_management(request):
         'unit_measurement_names': unit_measurement_names,
     })
 
+
 @auth
 def get_site(request, customer_id):
     customer = get_object_or_404(approvedinquiry, id=customer_id)
@@ -955,19 +977,22 @@ def get_site(request, customer_id):
     site_list = [{'id': site.id, 'name': site.site_name} for site in sites]
     return JsonResponse(site_list, safe=False)
 
+
 @auth
 def searchaddmaterial(request):
     addmates = addmaterial.objects.all()
     return render(request, "searchaddmaterial.html", {'addmates': addmates})
 
+
 @auth
-def updateaddmaterial(request,id):
+def updateaddmaterial(request, id):
     addmates = addmaterial.objects.get(id=id)
     form = addmaterialform(
-        initial={'customers': addmates.customers, 'site': addmates.site,'currentdate': addmates.currentdate,
-                 'transferdate': addmates.transferdate, 'materials': addmates.materials,'categorys': addmates.categorys,
-                 'specifications': addmates.specifications, 'units': addmates.units,'quantitys': addmates.quantitys,
-                 'requirementby': addmates.requirementby, 'requirementto': addmates.requirementto,})
+        initial={'customers': addmates.customers, 'site': addmates.site, 'currentdate': addmates.currentdate,
+                 'transferdate': addmates.transferdate, 'materials': addmates.materials,
+                 'categorys': addmates.categorys,
+                 'specifications': addmates.specifications, 'units': addmates.units, 'quantitys': addmates.quantitys,
+                 'requirementby': addmates.requirementby, 'requirementto': addmates.requirementto, })
     if request.method == "POST":
         form = addmaterialform(request.POST, instance=addmates)
         if form.is_valid():
@@ -990,7 +1015,6 @@ def deleteaddmaterial(request, id):
     return redirect('/searchaddmaterial')
 
 
-
 # *******************************************************************************************************************
 
 @auth
@@ -1010,6 +1034,7 @@ def createempregistration(request):
 
     return render(request, 'createempregistration.html', {'form': form})
 
+
 @auth
 def generate_employeeid(request):
     name = request.GET.get('name')
@@ -1019,20 +1044,24 @@ def generate_employeeid(request):
         return JsonResponse({'employeeid': employeeid})
     return JsonResponse({'error': 'Invalid name'}, status=400)
 
+
 @auth
 def searchempregistration(request):
     emplos = employeeregistration.objects.all()
     return render(request, "searchempregistration.html", {'emplos': emplos})
 
+
 @auth
-def updateempregistration(request,id):
+def updateempregistration(request, id):
     emplos = employeeregistration.objects.get(id=id)
     form = employeeregistrationform(
-        initial={'employee_name': emplos.employee_name, 'employeeid': emplos.employeeid,'emailid': emplos.emailid,
-                 'phonenum': emplos.phonenum,'dateofbirth': emplos.dateofbirth,'permanentaddress': emplos.permanentaddress,'presentaddress': emplos.presentaddress,
-                 'gender': emplos.gender,'bloodgroup': emplos.bloodgroup,'status': emplos.status,
-                 'bankacnum': emplos.bankacnum,'qualification': emplos.qualification,'aadharcard': emplos.aadharcard,'pancard': emplos.pancard,
-                 'pfnum': emplos.pfnum,'pfeligibledate': emplos.pfeligibledate,'licencenum': emplos.licencenum,})
+        initial={'employee_name': emplos.employee_name, 'employeeid': emplos.employeeid, 'emailid': emplos.emailid,
+                 'phonenum': emplos.phonenum, 'dateofbirth': emplos.dateofbirth,
+                 'permanentaddress': emplos.permanentaddress, 'presentaddress': emplos.presentaddress,
+                 'gender': emplos.gender, 'bloodgroup': emplos.bloodgroup, 'status': emplos.status,
+                 'bankacnum': emplos.bankacnum, 'qualification': emplos.qualification, 'aadharcard': emplos.aadharcard,
+                 'pancard': emplos.pancard,
+                 'pfnum': emplos.pfnum, 'pfeligibledate': emplos.pfeligibledate, 'licencenum': emplos.licencenum, })
     if request.method == "POST":
         form = employeeregistrationform(request.POST, instance=emplos)
         if form.is_valid():
@@ -1141,6 +1170,7 @@ def get_representatives(request):
     }
     return JsonResponse(data, safe=False)
 
+
 @auth
 def search_approvedinquiry(request):
     inquiries = approvedinquiry.objects.all()
@@ -1151,7 +1181,8 @@ def search_approvedinquiry(request):
 def update_approvedinquiry(request, id):
     approveds = approvedinquiry.objects.get(id=id)
     form = approvedinquiryform(
-        initial={'customer_name': approveds.customer_name, 'employee': approveds.employee,'plotarea': approveds.plotarea,
+        initial={'customer_name': approveds.customer_name, 'employee': approveds.employee,
+                 'plotarea': approveds.plotarea,
                  'constructionarea': approveds.constructionarea, 'constructioncost': approveds.constructioncost,
                  'totalcost': approveds.totalcost, 'worktype': approveds.worktype, })
     if request.method == "POST":
@@ -1199,16 +1230,20 @@ def clientregview(request):
     context["employee_name"] = employee_name
     return render(request, "client_registration.html", context)
 
+
 @auth
 def search_clientregs(request):
     reg = Client_registration.objects.all()
     return render(request, "search_clientreg.html", {'regs': reg})
 
+
 @auth
 def update_clientreg(request, id):
     branch = Client_registration.objects.get(id=id)
     form = clientregForm(
-        initial={'client_name': branch.client_name, 'representative_name': branch.representative_name, 'phone_no': branch.phone_no, 'email': branch.email, 'site_address': branch.site_address, 'inquiry_date': branch.inquiry_date, })
+        initial={'client_name': branch.client_name, 'representative_name': branch.representative_name,
+                 'phone_no': branch.phone_no, 'email': branch.email, 'site_address': branch.site_address,
+                 'inquiry_date': branch.inquiry_date, })
     if request.method == "POST":
         form = clientregForm(request.POST, instance=branch)
         if form.is_valid():
@@ -1220,6 +1255,7 @@ def update_clientreg(request, id):
                 pass
     return render(request, 'update_clientreg.html', {'form': form})
 
+
 @auth
 def delete_clientreg(request, id):
     citys = Client_registration.objects.get(id=id)
@@ -1228,6 +1264,7 @@ def delete_clientreg(request, id):
     except:
         pass
     return redirect('/search_clientreg')
+
 
 # **********************************************************************************************************************
 
@@ -1251,6 +1288,7 @@ def clientinquirygview(request):
 
     return render(request, "client_inquiry_form.html", context)
 
+
 @auth
 def get_representativess(request):
     client_id = request.GET.get('client_id')
@@ -1258,16 +1296,20 @@ def get_representativess(request):
     data = [{"id": rep.id, "name": rep.employee_name} for rep in representatives]
     return JsonResponse(data, safe=False)
 
+
 @auth
 def search_clientinq(request):
     client = ClientInquiry.objects.all()
     return render(request, "search_clientinquiry.html", {'inq': client})
 
+
 @auth
 def update_clientinq(request, id):
     client = ClientInquiry.objects.get(id=id)
     form = clientinquiryForm(
-        initial={'client_name': client.client_name, 'representative_name': client.representative_name, 'address': client.address, 'date': client.date, 'follow_off_date': client.follow_off_date, 'construction_type': client.construction_type,'remark': client.remark })
+        initial={'client_name': client.client_name, 'representative_name': client.representative_name,
+                 'address': client.address, 'date': client.date, 'follow_off_date': client.follow_off_date,
+                 'construction_type': client.construction_type, 'remark': client.remark})
     if request.method == "POST":
         form = clientinquiryForm(request.POST, instance=client)
         if form.is_valid():
@@ -1279,6 +1321,7 @@ def update_clientinq(request, id):
                 pass
     return render(request, 'update_clientinquiry.html', {'form': form})
 
+
 @auth
 def delete_clientinq(request, id):
     client = ClientInquiry.objects.get(id=id)
@@ -1287,6 +1330,7 @@ def delete_clientinq(request, id):
     except:
         pass
     return redirect('/search_clientinquiry')
+
 
 # *********************************************************************************************************************
 
@@ -1336,27 +1380,34 @@ def labour_management_view(request):
     context["employees"] = cemployee
 
     return render(request, "createlabour.html", context)
+
+
 @auth
 def get_sites_by_customer(request, customer_id):
     sites = Site.objects.filter(customer_id=customer_id)
     sites_data = [{"id": site.id, "name": site.site_name} for site in sites]
     return JsonResponse(sites_data, safe=False)
 
+
 @auth
 def search_masterlabour(request):
     client = masterlabour.objects.all()
     return render(request, "search_masterlabour.html", {'labour': client})
+
 
 @auth
 def search_labourtransaction(request):
     client = labourtransaction.objects.all()
     return render(request, "search_labourtransaction.html", {'labour': client})
 
+
 @auth
 def update_masterlabour(request, id):
     client = masterlabour.objects.get(id=id)
     form = labourmasterform(
-        initial={'customer': client.customer, 'sites': client.sites, 'current_date': client.current_date, 'transfer_date': client.transfer_date, 'requirement_by': client.requirement_by, 'requirement_to': client.requirement_to})
+        initial={'customer': client.customer, 'sites': client.sites, 'current_date': client.current_date,
+                 'transfer_date': client.transfer_date, 'requirement_by': client.requirement_by,
+                 'requirement_to': client.requirement_to})
     if request.method == "POST":
         form = labourmasterform(request.POST, instance=client)
         if form.is_valid():
@@ -1368,11 +1419,13 @@ def update_masterlabour(request, id):
                 pass
     return render(request, 'update_masterlabour.html', {'form': form})
 
+
 @auth
 def update_labourtransaction(request, id):
     client = labourtransaction.objects.get(id=id)
     form = labourtransform(
-        initial={'customerid': client.customerid, 'constructiontypes': client.constructiontypes, 'quantity': client.quantity })
+        initial={'customerid': client.customerid, 'constructiontypes': client.constructiontypes,
+                 'quantity': client.quantity})
     if request.method == "POST":
         form = labourtransform(request.POST, instance=client)
         if form.is_valid():
@@ -1384,6 +1437,7 @@ def update_labourtransaction(request, id):
                 pass
     return render(request, 'update_labourtransaction.html', {'form': form})
 
+
 @auth
 def delete_masterlabour(request, id):
     client = masterlabour.objects.get(id=id)
@@ -1393,6 +1447,7 @@ def delete_masterlabour(request, id):
         pass
     return redirect('/search_masterlabour')
 
+
 @auth
 def delete_labourtransaction(request, id):
     client = labourtransaction.objects.get(id=id)
@@ -1401,3 +1456,203 @@ def delete_labourtransaction(request, id):
     except:
         pass
     return redirect('/search_labourtransaction')
+
+
+#*******************************************************************************************************************************
+
+
+
+
+import json
+from django.shortcuts import render
+from django.contrib import messages
+from .models import mastermateriallist, brandlist, unitmeasurement, subcategory
+
+
+def createsubcategory(request):
+    context = {}
+
+    # Fetch data for the dropdowns
+    materialname = mastermateriallist.objects.all()
+    brandname = brandlist.objects.all()
+    unitmeasurementname = unitmeasurement.objects.all()
+
+    if request.method == "POST":
+        # Get the JSON data from the form
+        subcategory_data = request.POST.get('subcategoryData', '[]')
+
+        try:
+            # Load the JSON data
+            subcategory_list = json.loads(subcategory_data)
+
+            # Iterate over each item in the list
+            for subcategory_item in subcategory_list:
+                # Extract data from each item
+                material_id = subcategory_item.get('materialId')
+                brand_id = subcategory_item.get('brandId')
+                unit_id = subcategory_item.get('unitId')
+                subcategory_name = subcategory_item.get('subcategoryName')
+                unit_per = subcategory_item.get('unitPer')
+
+                # Fetch the corresponding objects from the database
+                material = mastermateriallist.objects.get(materialid=material_id)
+                brand = brandlist.objects.get(id=brand_id)
+                unit = unitmeasurement.objects.get(unitmeasurementid=unit_id)
+
+                # Create a new subcategory object
+                subcategory.objects.create(
+                    subcategorys=subcategory_name,
+                    categorys=material,
+                    brands=brand,
+                    units=unit,
+                    unitper=unit_per
+                )
+
+            messages.success(request, 'Subcategories have been saved successfully!')
+
+        except json.JSONDecodeError:
+            messages.error(request, 'Failed to decode JSON data.')
+        except mastermateriallist.DoesNotExist:
+            messages.error(request, 'Material not found.')
+        except brandlist.DoesNotExist:
+            messages.error(request, 'Brand not found.')
+        except unitmeasurement.DoesNotExist:
+            messages.error(request, 'Unit not found.')
+        except Exception as e:
+            messages.error(request, f'An error occurred: {str(e)}')
+
+    # Add context data for rendering the form
+    context["materialname"] = materialname
+    context["brandname"] = brandname
+    context["unitmeasurementname"] = unitmeasurementname
+
+    return render(request, "createsubcategory.html", context)
+
+
+def searchsubcategory(request):
+    sub = subcategory.objects.all()
+    return render(request, "searchsubcategory.html", {'sub': sub})
+
+def updatesubcategory(request, id):
+    sub = subcategory.objects.get(id=id)
+    form = subcategoryform(
+        initial={'subcategorys': sub.subcategorys, 'categorys': sub.categorys, 'brands': sub.brands, 'units': sub.units, 'unitper': sub.unitper })
+    if request.method == "POST":
+        form = subcategoryform(request.POST, instance=sub)
+        if form.is_valid():
+            try:
+                form.save()
+                model = form.instance
+                return redirect('/searchsubcategory')
+            except Exception as e:
+                pass
+    return render(request, 'updatesubcategory.html', {'form': form})
+
+
+def deletesubcategory(request, id):
+    sub = subcategory.objects.get(id=id)
+    try:
+        sub.delete()
+    except:
+        pass
+    return redirect('/searchsubcategory')
+
+
+#*****************************************************************************************************************************
+#*****************************************************************************************************************************
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.contrib import messages
+from .forms import selectproductform
+from .models import approvedinquiry, Site, brandlist, mastermateriallist, subcategory
+
+def create_selectproduct(request):
+    context = {}
+
+    customers_list = approvedinquiry.objects.all()
+    sites_list = Site.objects.all()
+    brands_list = brandlist.objects.all()
+
+    if request.method == "POST":
+        form = selectproductform(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Product selection has been saved successfully!')
+            return redirect('/searchselectproduct')
+        else:
+            print(request.POST)
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = selectproductform()
+
+    context["form"] = form
+    context["customers_list"] = customers_list
+    context["sites_list"] = sites_list
+    context["brands_list"] = brands_list
+
+    return render(request, "addproduct.html", context)
+
+def load_sites(request):
+    customer_id = request.GET.get('customer')
+    sites_list = Site.objects.filter(customer_id=customer_id).distinct()
+    return JsonResponse(list(sites_list.values('id', 'site_name')), safe=False)
+
+def load_categories(request):
+    brand_id = request.GET.get('brand')
+    subcategories = subcategory.objects.filter(brands_id=brand_id).distinct()
+    category_ids = subcategories.values_list('categorys_id', flat=True).distinct()
+    categories = mastermateriallist.objects.filter(materialid__in=category_ids).distinct()
+    return JsonResponse(list(categories.values('materialid', 'materialname')), safe=False)
+
+def load_subcategories(request):
+    category_id = request.GET.get('category')
+    subcategories = subcategory.objects.filter(categorys_id=category_id).distinct()
+    return JsonResponse(list(subcategories.values('id', 'subcategorys')), safe=False)
+
+def load_units_and_price(request):
+    subcategory_id = request.GET.get('subcategory')
+    subcategory_obj = subcategory.objects.get(id=subcategory_id)
+    unit = subcategory_obj.units
+    print("Unit object:", unit)
+    print("Unit ID:", unit.pk)  # Debugging line
+    unitprice = subcategory_obj.unitper
+    data = {
+        'unit_id': unit.pk,
+        'unit_name': unit.unitmeasurementname,
+        'unitprice': unitprice
+    }
+    return JsonResponse(data)
+
+
+def searchselectproduct(request):
+    product = selectproduct.objects.all()
+    return render(request, "searchselectproduct.html", {'product': product})
+
+
+def updateselectproduct(request, id):
+    product = selectproduct.objects.get(id=id)
+    form = selectproductform(
+        initial={'customer': product.customer, 'site': product.site,
+                 'brand': product.brand,'category': product.category,
+                 'subcategorys': product.subcategorys,'unit': product.unit,
+                 'unitprice': product.unitprice,'quantity': product.quantity,
+                 'totalprice': product.totalprice})
+    if request.method == "POST":
+        form = selectproductform(request.POST, instance=product)
+        if form.is_valid():
+            try:
+                form.save()
+                model = form.instance
+                return redirect('/searchselectproduct')
+            except Exception as e:
+                pass
+    return render(request, 'updateselectproduct.html', {'form': form})
+
+
+def deleteselectproduct(request, id):
+    product = selectproduct.objects.get(id=id)
+    try:
+        product.delete()
+    except:
+        pass
+    return redirect('/searchselectproduct')
