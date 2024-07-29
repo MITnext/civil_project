@@ -130,7 +130,7 @@ urlpatterns = [
     path('update_labourtransaction/<int:id>', views.update_labourtransaction,  name='update_labourtransaction'),
     path('delete_labourtransaction/<int:id>', views.delete_labourtransaction,  name='delete_labourtransaction'),
 
-path('createsubcategory/', views.createsubcategory, name='createsubcategory'),
+    path('createsubcategory/', views.createsubcategory, name='createsubcategory'),
     path('searchsubcategory/', views.searchsubcategory),
     path('updatesubcategory/<int:id>', views.updatesubcategory),
     path('deletesubcategory/<int:id>', views.deletesubcategory),

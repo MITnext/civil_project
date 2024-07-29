@@ -302,7 +302,7 @@ def assign_view(request):
                 Status='assign'
             )
 
-        return redirect('/search_masterdata')
+        return redirect('/search_tasktransaction')
 
     context["customer_name"] = customer_name
     context["tasks"] = tasks
@@ -315,7 +315,6 @@ def get_sites(request, customer_id):
     site_list = [{'id': site.id, 'site_name': site.site_name} for site in sites]
     return JsonResponse(site_list, safe=False)
 
-@auth
 def update_task(request, task_id):
     task = get_object_or_404(Taskttransaction, id=task_id)
     employees = employeeregistration.objects.all()
@@ -340,7 +339,7 @@ def update_task(request, task_id):
             task.Status = status
 
         task.save()
-        return HttpResponseRedirect('/tasks/')
+        return HttpResponseRedirect('/search_tasktransaction')
 
     return render(request, 'update_task.html', {
         'task': task,
@@ -349,8 +348,6 @@ def update_task(request, task_id):
         'status_upto': calculate_status_upto(task),
         'error_message': None
     })
-
-@auth
 def calculate_status_upto(task):
     today = datetime.now().date()
     if task.start_date and task.end_date:
@@ -769,7 +766,7 @@ def searchsite(request):
 def updatesite(request,id):
     sitess = Site.objects.get(id=id)
     form = siteform(
-        initial={'site_name': sitess.site_name, 'ownername': sitess.ownername,'pincode': sitess.pincode,
+        initial={'site_name': sitess.site_name, 'customer': sitess.customer,'pincode': sitess.pincode,
                  'state': sitess.state,'city': sitess.city,
                  'houseno': sitess.houseno,'roadname': sitess.roadname,'address': sitess.address,})
     if request.method == "POST":
@@ -1443,7 +1440,8 @@ def createsubcategory(request):
                     unitper=unit_per
                 )
 
-            messages.success(request, 'Subcategories have been saved successfully!')
+                return redirect('/searchsubcategory')
+
 
         except json.JSONDecodeError:
             messages.error(request, 'Failed to decode JSON data.')
